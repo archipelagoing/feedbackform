@@ -292,7 +292,12 @@ Warning: Utilities are not directly observable from arbitrary comments. Any infe
 - Accepted: Human-defined decision rule satisfied.
 - Deferred: No acceptable proposal yet; questions remain.
 9.5 Decision rules
-The workspace owner/team selects an explicit rule before final review, e.g. unanimous consent, consent with stated reservations, or supermajority. MVP default: all four members must explicitly approve the final selection. This is a proposed default, not a claim that every team should use unanimity.
+Confirmed pilot rule (user selection, October 15, 2026): all four participants
+must explicitly support or support with reservations. Reservations remain visible.
+Missing responses, abstention, requests for changes, and opposition do not satisfy
+the rule. Reviews must apply to the exact proposal version being accepted.
+Decision-recording authority and final review-state labels remain to be settled.
+This pilot choice is not a claim that every team should use the same rule.
 10. Traceability and explainability
 Every synthesis should include a Why this feature? view with:
 - Source idea(s) and exact passage(s).
@@ -419,6 +424,10 @@ Possible synthesis: an autonomous experimentation agent that plans investigation
 - A final decision can be exported with provenance and unresolved reservations.
 15. Evaluation and experimental design
 This project should demonstrate AI engineering, not merely a working interface.
+Course clarification, October 15, 2026: the user's “no” to the training/fine-tuning
+question is interpreted as no mandatory training or fine-tuning. Plan around
+evaluated LLM orchestration; remaining grading, submission, and deployment
+requirements are not established by that answer.
 15.1 Evaluation datasets
 - Synthetic controlled cases: Known preferences, hard constraints, contradictory statements, missing votes, and feasible/infeasible combinations.
 - Human-annotated cases: Real team comments with independently confirmed preference labels.
@@ -469,6 +478,11 @@ Test whether added agent complexity materially improves quality relative to late
 - Generation of two or three alternative proposals.
 - Proposal review with explicit per-person stance.
 - Simple decision record and markdown export.
+- Real ticketing-system integration (required by the user on October 15, 2026).
+  The user selected GitHub Issues and outbound implementation tickets from approved
+  proposals. Generate editable ticket drafts, then support human-authorized issue
+  creation with stored external links. Ticket import and bidirectional status sync
+  are deferred. See `todo.md` §§1 and 6.1.
 - Logging and an evaluation harness.
 16.2 Phase 2 — only after the MVP works
 - PDF import with robust passage anchoring.
@@ -476,7 +490,8 @@ Test whether added agent complexity materially improves quality relative to late
 - Visual idea graph and relationship exploration.
 - Automatic duplicate detection and idea merging suggestions.
 - Rich proposal comparison matrices.
-- Optional integrations with GitHub, Drive, and messaging platforms.
+- Additional integrations beyond the required initial ticketing provider, such
+  as Drive and messaging platforms.
 - Cross-workspace templates and organization controls.
 16.3 Future explorations
 - Facilitator agent that asks well-timed clarification questions.
@@ -528,7 +543,11 @@ Member	Primary responsibility	Deliverables
 
 Shared responsibility: Integration, testing, prompt review, academic write-up, and demo. No one should be relegated to presentation-only work. If the course strongly prioritizes AI work over UI, keep frontend scope extremely small and redistribute effort toward benchmarking and agent reliability.
 19. Delivery plan
-Scheduling note: The teammates' source document proposed September 21–November 21, 2026. As of October 15, that nominal target leaves roughly five weeks. Confirm the actual course deadline before adopting this plan.
+Scheduling note: The user confirmed November 22, 2026 as the course deadline on
+October 15, 2026, superseding the earlier November 21 planning target. Submission
+time and timezone, delivery requirements, and deployment environment remain open.
+The checkpoints in `todo.md` §1 include the required ticketing integration;
+the five-week plan below remains a high-level allocation to reconcile with them.
 Compressed five-week plan
 Week 1 — Foundation
 Define user stories and schemas; build idea creation, comments, workspace persistence; assemble first labeled examples.
@@ -540,7 +559,10 @@ Week 4 — Group review
 Add proposal comparison, participant stances, revision workflow, and decision records; run end-to-end pilot.
 Week 5 — Evaluation and demonstration
 Run baselines and ablations, fix failure cases, rehearse live demo, and complete report.
-Scope-cut order if behind: Defer PDF import, visual graph, real-time editing, integrations, and sophisticated optimization before cutting preference correction, provenance, human review, or evaluation.
+Scope-cut order if behind: Defer PDF import, visual graph, real-time editing,
+additional integrations, and sophisticated optimization before cutting preference
+correction, provenance, human review, or evaluation. Preserve the required outbound
+GitHub Issues integration; reduce optional ticket metadata and workflow features first.
 20. Live demo script
 1. Open a workspace with several rough project ideas.
 2. Have four participant profiles contribute distinct natural-language feedback.
@@ -576,15 +598,21 @@ Failure conditions
 22. Open product decisions
 These questions are intentionally unresolved:
 1. Should a workspace default to open discussion or independent feedback before others' reactions become visible?
-2. What review states and approval rule should the first pilot use?
+2. Approval requires all four to support or support with reservations (confirmed
+   October 15, 2026). What final review-state labels and decision-recording
+   authority should the pilot use?
 3. How much structure should be required when someone marks a preference “essential”?
 4. Should the AI ask clarifying questions immediately or collect them into a review queue?
 5. Should participants be able to submit anonymous feedback? If so, how is provenance protected?
 6. Which PDF formats must the first release support, if any?
 7. Should generated proposals be editable directly, fork-only, or both?
 8. What is the minimum useful set of metrics for the course rubric?
-9. What is the confirmed course deadline and deployment environment?
+9. The course deadline is confirmed as November 22, 2026. What are the submission
+   time/timezone, required artifacts, and deployment environment?
 10. How will the team collect genuine participant judgments for evaluation without contaminating the test set?
+11. Which controlled GitHub repository and authentication setup will the pilot use?
+    GitHub Issues with outbound implementation tickets from approved proposals is
+    confirmed; import and bidirectional status sync are deferred.
 23. Product voice and writing guidance
 FeedbackForm should sound like a thoughtful collaborator, not a facilitator forcing agreement.
 Prefer:
