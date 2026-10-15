@@ -2,13 +2,15 @@
 
 Last updated: 2026-10-15.
 
-Current state: Planning only. [idea.md](idea.md) defines the concept and
+Current state: Product and technical specifications only. [idea.md](idea.md) defines the concept and
 [projBible.md](projBible.md) defines product intent. Repository inspection found
 no application code, dependency manifests, tests, or deployment configuration.
 No runtime behavior has been verified. The next milestone is a constrained,
 four-participant workflow from ideas and feedback to reviewed proposals, with a
-real ticketing integration. The course deadline is November 22, 2026, confirmed
-by the user. GitHub Issues creation from approved proposals is selected;
+real ticketing integration. Course dates follow [project-requirements.pdf](project-requirements.pdf),
+per the user's clarification: proposal November 12, final presentation December 3,
+and final report December 17, 2026. The earlier November 22 deadline is superseded.
+GitHub Issues creation from approved proposals is selected;
 ticket imports and bidirectional status sync are deferred.
 
 ## Maintenance instructions
@@ -27,17 +29,20 @@ ticket imports and bidirectional status sync are deferred.
 
 ## Next steps
 
-1. Finalize pilot decision rules, remaining course requirements, and MVP boundaries
-   in section 1. Deadline: November 22, 2026; outbound GitHub Issues is selected.
-2. Define versioned data contracts and the primary evaluation question in sections
-   2 and 7 before implementation or prompt tuning.
+1. Scaffold the selected Next.js/FastAPI/SQLite stack and implement executable
+   schemas and migrations from `docs/data-model.md` in section 2.
+2. Define the primary evaluation question and initial labeled cases in section 7
+   before prompt tuning.
 3. Set up the local application and controlled pilot access in section 2.
 4. Complete persistent idea capture and passage comments in section 3.
 5. Connect extraction, correction, and two-candidate synthesis in sections 4–5.
 
-The product direction is documented. Decisions below remain open; suggested
-defaults are proposals, not confirmed team agreements. Evaluation examples should
-be assembled alongside the first implementation rather than at the end.
+The user accepted the MVP and pilot rules on 2026-10-15. Stack and versioned data
+contracts are now defined in `docs/architecture.md` and `docs/data-model.md`.
+Evaluation design and delivery environment remain open. Team registration is
+expected to be handled by October 22 at 3pm but has not been verified; prepare
+the November 12 proposal in parallel. Assemble evaluation examples alongside
+the first implementation rather than at the end.
 
 ## 1. Define the pilot and freeze scope
 
@@ -45,58 +50,71 @@ be assembled alongside the first implementation rather than at the end.
   `projBible.md` §§1–5 and §14.
 - [x] Document invariants covering original voice, explicit human support,
   unresolved disagreement, and source attribution in `projBible.md` §3.
-- [x] Confirm the course deadline: November 22, 2026 (user confirmation,
-  2026-10-15). Submission time and timezone have not been specified.
+- [x] Extract course dates and formats from `project-requirements.pdf`, page 1.
+  The user instructed us to follow the PDF on 2026-10-15; this supersedes the
+  earlier November 22 deadline. See the course milestones below. Timezone is
+  not stated in the PDF.
 - [x] Record the user's answer about required model training/fine-tuning: “no”
   (2026-10-15), interpreted as no mandatory training/fine-tuning. Plan for evaluated
   LLM orchestration; the answer does not establish all course grading criteria.
-- [ ] Confirm submission format, deployment needs, and any remaining course
-  grading requirements; record the answers and their source.
+- [x] Record submission formats and listed points from the PDF: proposal writeup
+  10, final presentation 10, report 20. Research and application avenues share
+  the score breakdown; the PDF does not specify a separate proposal-presentation score.
+- [x] Check explicit technical requirements: an open-access project GitHub
+  repository link is required in the report. Model training/fine-tuning and a
+  hosted deployment are not explicitly mandated by this PDF.
+- [ ] Confirm submission timezone and check Canvas/instructor guidance for any
+  additional grading, deployment, or submission requirements not stated in the PDF.
 - [x] Establish real ticketing integration as a required first-release capability
   (user requirement, 2026-10-15). This confirms scope intent, not implementation.
 - [x] Choose one initial ticketing provider and integration direction: approved
   proposal → reviewed implementation tickets → GitHub Issues (user selection,
   2026-10-15). Ticket import and bidirectional status sync are deferred.
-- [ ] Agree on the first-release contract: four controlled participant accounts,
+- [x] Agree on the first-release contract: four controlled participant accounts,
   one workspace, plain-text ideas, passage comments, preference correction,
   two distinct candidate proposals, explicit reviews, a decision export, and one
   real ticketing integration.
-  Reconcile any reductions with the bible's broader MVP list.
+  Accepted by the user on 2026-10-15; the bible's MVP list is reconciled.
 - [x] Choose the pilot approval rule: all four participants must explicitly
   support or support with reservations (user selection, 2026-10-15). Reservations
   remain visible. Missing responses, abstention, requests for changes, and
   opposition do not satisfy this rule.
-- [ ] Finalize review-state labels and who may record a decision after the
-  four-person approval rule passes.
-- [ ] Define how a participant-confirmed requirement becomes a binding workspace
-  constraint, who authorizes it, and how incompatible constraints are handled.
-- [ ] Define correction and publication rules: material interpretations need
+- [x] Finalize review states: support, support with reservations, request changes,
+  oppose, abstain. The workspace owner records a decision after the four-person
+  approval rule passes (user acceptance, 2026-10-15).
+- [x] Define binding constraints: all four explicitly accept a requirement before
+  it binds the group. Incompatible constraints require human revision; AI cannot
+  silently relax them (user acceptance, 2026-10-15).
+- [x] Define correction and publication rules: material interpretations need
   confirmation before becoming binding; generated candidates remain drafts
   until a human chooses to share them for review.
-- [ ] Agree on exclusions: PDF/OCR import, live collaborative editing, visual
+- [x] Agree on exclusions: PDF/OCR import, live collaborative editing, visual
   graphs, anonymous feedback, additional integrations, optimization of utilities,
   and full task management stay outside the first release. Ticket import and
   bidirectional sync are deferred under the selected outbound-only integration.
 
 Progress: Product intent is documented, not validated with the pilot group.
-The user confirmed the November 22 deadline and required real ticketing integration
-on 2026-10-15, and selected outbound GitHub Issues creation from approved proposals.
+The user selected the PDF as the schedule authority, superseding November 22,
+and required outbound GitHub Issues creation from approved proposals.
 The user also selected all-four support/support-with-reservations and answered
-“no” to the course training/fine-tuning question. Other course requirements,
-decision-recording authority, and the proposed scope reductions remain open.
+“no” to the course training/fine-tuning question. The PDF does not explicitly
+require training or deployment. On 2026-10-15 the user accepted the MVP, owner
+decision authority, all-four constraint acceptance, and human correction and
+ticket review rules. Course clarifications remain open; registration and other
+future actions have not been marked completed.
 
-### Pilot rules — confirmed approval rule and proposed defaults
+### Pilot rules — agreed 2026-10-15
 
-The approval threshold is confirmed. The other defaults below remain proposals.
+These rules define intended behavior; implementation is still outstanding.
 
-- Reviews (proposed labels): support, support with reservations, request changes,
+- Reviews: support, support with reservations, request changes,
   oppose, or abstain.
   All four participants review the exact proposal version. Approval requires all
   four to support or support with reservations; reservations stay visible.
   Missing responses, abstention, requests for changes, or opposition prevent
   approval under the confirmed rule. Reviews apply to the exact proposal version;
   implementing version binding remains unfinished work in section 2.
-- Authority: a designated human facilitator records a decision only when the
+- Authority: the workspace owner records a decision only when the
   rule passes. AI cannot submit reviews, adopt constraints, or finalize decisions.
 - Constraints: personal confirmation establishes what someone means; all four
   must explicitly accept a requirement before it becomes binding on the workspace.
@@ -108,33 +126,52 @@ The approval threshold is confirmed. The other defaults below remain proposals.
   reviews the exact content and destination before any external ticket creation.
   No ticketing credentials or live destination are needed to settle these rules.
 
+### Course milestones — PDF requirements
+
+Source: `project-requirements.pdf`, page 1, CS541A Fall 2026. Times are reproduced
+as written; timezone is unspecified. These tasks are tracked in section 8.
+
+| Milestone | Due / event | Required format |
+| --- | --- | --- |
+| Team formation | October 22, 3pm | One teammate fills in team information on Canvas. |
+| Proposal presentation | November 12 in lecture; upload by 3pm | At most 5 minutes: problem, existing solutions, proposed solution. |
+| Proposal writeup — 10 points | November 12, 3pm | PDF, at most 2 pages; essentially the presentation's content. |
+| Final presentation — 10 points | December 3 in lecture; upload by 3pm | At most 5 minutes: problem, solution, and how well it addresses the problem. |
+| Final report — 20 points | December 17, 23:59 | Official ACL format, PDF, at most 4 main pages plus unlimited references and appendix; include an open-access project GitHub repository link. |
+
 ### Proposed delivery checkpoints
 
-Work backward from November 22; checkpoints are planning targets, not additional
-confirmed course deadlines. Ownership and feasibility still need team review.
+These are internal planning targets, not additional course deadlines. Ownership
+and feasibility still need team review. November 22 is no longer a course deadline.
 
 - October 18: resolve section 1 policies, provider, scope, and evaluation target.
 - October 25: working persistent workspace, comments, and preference correction.
 - November 1: two-candidate synthesis, lineage, and constraint critique.
 - November 8: versioned human review, decision recording, and ticket integration
   working against a real provider in a controlled test destination.
-- November 15: four-person pilot and held-out evaluation complete; remaining work
-  focuses on defects, analysis, and demonstration.
-- November 20: clean-environment rehearsal and submission artifacts ready.
-- November 22: course deadline; verify submission time and timezone separately.
+- November 10: proposal slides and two-page writeup ready for review ahead of
+  the November 12 submissions.
+- November 22: proposed internal target for the four-person pilot and initial
+  held-out evaluation, leaving time to fix failures before the final presentation.
+- December 1: final slides, results, and clean-environment demo rehearsal ready.
+- December 15: ACL report and public-repository checks ready for final review.
 
 ## 2. Establish data contracts and a runnable foundation
 
-- [ ] Select and record the pilot stack and supported environment. Starting
-  proposal from the bible: React/Next.js, FastAPI, SQLite, and an explicit Python
-  workflow; confirm before scaffolding.
-- [ ] Define validated schemas for source references, preferences, constraints,
+- [x] Select and record the pilot stack and supported environment in
+  [architecture.md](docs/architecture.md): Next.js/TypeScript, FastAPI/Pydantic,
+  SQLite/SQLAlchemy/Alembic, and explicit Python workflow stages. Start with a
+  local desktop Chromium pilot; hosting remains open.
+- [x] Define record contracts for source references, preferences, constraints,
   themes/tensions, proposal features, reviews, decisions, and workflow events.
   Distinguish inferred preferences, participant confirmation, and group acceptance.
-- [ ] Define immutable idea and proposal versions. Anchor comments and feature
+  See [data-model.md](docs/data-model.md); these are specifications, not runtime models.
+- [ ] Implement Pydantic boundary schemas, relational models, and migrations from
+  those contracts; verify same-workspace references and domain transition checks.
+- [x] Define immutable idea and proposal versions. Anchor comments and feature
   evidence to exact source versions; attach each review to the proposal version
   reviewed. A later edit must not inherit approval automatically.
-- [ ] Define analysis snapshots: record input versions, preference/constraint
+- [x] Define analysis snapshots: record input versions, preference/constraint
   revisions, model and prompt versions, and run IDs. Mark results stale when
   their inputs change rather than presenting them as current.
 - [ ] Scaffold frontend, backend, persistence, migrations, environment examples,
@@ -145,9 +182,15 @@ confirmed course deadlines. Ownership and feasibility still need team review.
 - [ ] Verify a local round trip: a participant creates an idea, reloads the page,
   and retrieves the same attributed content from persistent storage.
 
-Progress: No stack has been selected or scaffolded. Versioning and permission
-contracts should precede feature work because later evidence and decisions depend
-on them. Section 1's core rules are prerequisites for finalizing these contracts.
+Progress (2026-10-15): Selected stack and documented versioned records, stage
+payloads, snapshot freshness, constraint acceptance, review rounds, decision
+validation, and GitHub batch/retry contracts. Consulted official framework and
+GitHub documentation linked in the architecture. Local tools: Node 24.10.0,
+npm 11.6.0, Python 3.14.7; Pydantic is not installed in the inspected interpreter.
+Dependencies, executable schemas, migrations, authentication, and runtime checks
+remain unimplemented. No application behavior has been verified.
+Documentation checks: local links resolved across README, checklist, product
+bible, architecture, and data contracts; `git diff --check` reported no whitespace errors.
 
 ## 3. Capture ideas and contextual feedback
 
@@ -167,7 +210,7 @@ on them. Section 1's core rules are prerequisites for finalizing these contracts
 Progress: No capture or annotation UI exists. Start with immutable source
 versions rather than promising automatic re-anchoring across arbitrary edits.
 Threaded replies, quick reactions, and richer navigation are deferred below
-pending the scope decision in section 1.
+under the agreed scope decision in section 1.
 
 ## 4. Extract preferences and support correction
 
@@ -233,7 +276,7 @@ recovery, as described in `projBible.md` §20.
   endorsement cannot produce a false claim of unanimous or current approval.
 
 Progress: All-four support or support-with-reservations is the confirmed approval
-rule. Final state labels and decision-recording authority remain open. Final
+rule. State labels and owner decision authority are also agreed in section 1. Final
 authorization must depend on persisted human actions, not model-generated assessments.
 
 ### 6.1 Real ticketing integration
@@ -293,6 +336,13 @@ pilot feedback alone will not establish broad effectiveness.
 
 ## 8. Prepare the demonstration and handoff
 
+- [ ] Have one teammate register the team on Canvas by October 22 at 3pm and
+  record confirmation. The PDF's requirement does not establish that this is done.
+- [ ] Prepare and upload proposal slides by November 12 at 3pm; rehearse a talk
+  of at most five minutes for that day's lecture covering the problem, existing
+  solutions, and proposed solution.
+- [ ] Prepare and submit the proposal PDF by November 12 at 3pm: at most two
+  pages, covering essentially the same content as the proposal presentation.
 - [ ] Review empty, loading, error, stale-analysis, and no-feasible-candidate
   states; verify readable labels, focus behavior, and keyboard operation on the
   chosen browser and device scope.
@@ -305,22 +355,32 @@ pilot feedback alone will not establish broad effectiveness.
 - [ ] Prepare a repeatable demo dataset and reset procedure. Rehearse the complete
   flow, including one correction, one unresolved objection, failure recovery,
   source inspection, and the baseline comparison.
-- [ ] Prepare the course report and required submission artifacts with measured
-  results, trade-offs, and limitations. Verify setup from a clean environment.
+- [ ] Prepare and upload final slides by December 3 at 3pm; rehearse a talk of
+  at most five minutes for that day's lecture covering the problem, solution,
+  and evidence of effectiveness. Verify demo setup from a clean environment.
+- [ ] Prepare and submit the final report PDF by December 17 at 23:59 in official
+  ACL format: at most four main pages, unlimited references and appendix. Include
+  measured results, trade-offs, limitations, and an open-access project GitHub link.
+- [ ] Prepare a repository suitable for public access, checking setup instructions,
+  reproducibility, and absence of secrets or private participant data. Verify the
+  report's repository link is accessible without sign-in before submission;
+  any visibility change still needs authorization.
 - [ ] Complete the agreed handoff and verify it in the intended setting; any
   public deployment or external publication requires separate authorization.
 
-Progress: Deadline confirmed as November 22, 2026. Other delivery requirements and
-environment are unconfirmed. Local demo
-readiness and a verified deployment are separate outcomes.
+Progress: Dates and artifact formats were extracted from `project-requirements.pdf`
+on 2026-10-15. No registration, upload, or submission has been performed or verified.
+Timezone and any additional Canvas guidance remain unconfirmed. A hosted deployment
+is not explicitly required by the PDF; public repository access is required.
 
 ## Future priorities
 
-These items remain outside the proposed first-release contract. Move them into
+These items remain outside the agreed first-release contract. Move them into
 the active sections only after the core flow works and scope is explicitly expanded.
 
 - [ ] Add threaded replies and optional reaction shortcuts (deferred from the
-  bible's broader MVP to prioritize the complete AI and review workflow).
+  bible's original broader MVP to prioritize the complete AI and review workflow;
+  scope reduction accepted on 2026-10-15).
 - [ ] Add richer proposal comparison, forks, and history navigation once the
   basic versioned revision loop is usable.
 - [ ] Add PDF import and robust passage anchoring with supported-format tests.
@@ -337,8 +397,10 @@ the active sections only after the core flow works and scope is explicitly expan
 
 - **Observed starting point:** Documentation only, verified by repository file
   inspection on 2026-10-15. No runtime checks were available to run.
-- **Confirmed requirements — 2026-10-15:** Course deadline November 22, 2026;
-  real ticketing integration is required, using GitHub Issues to create implementation
+- **Schedule authority — 2026-10-15:** The user instructed us to follow
+  `project-requirements.pdf`; its dates supersede the earlier November 22 deadline.
+- **Confirmed requirements — 2026-10-15:** Real ticketing integration is required,
+  using GitHub Issues to create implementation
   tickets from approved proposals. Source: user instructions in this session.
 - **Confirmed approval rule — 2026-10-15:** All four participants must support or
   support with reservations; retain reservations in the decision record.
@@ -346,9 +408,14 @@ the active sections only after the core flow works and scope is explicitly expan
   mandatory model training/fine-tuning, not as confirmation of submission or
   deployment requirements.
 - **Open decisions:** Remaining course requirements, test repository/access,
-  exact first-release scope,
-  review and constraint authority, stack, evaluation target, and delivery setting
+  model provider/access, evaluation target, and delivery setting
   are tracked in the relevant sections above.
+- **MVP and policy acceptance — 2026-10-15:** The user accepted the proposed
+  first-release boundaries, workspace-owner decision recording, all-four binding
+  constraint acceptance, and human correction and ticket review rules.
+- **Technical selection — 2026-10-15:** Next.js/TypeScript UI, FastAPI/Pydantic API,
+  SQLite with SQLAlchemy and Alembic, explicit Python orchestration, server-side
+  GitHub REST integration. See `docs/architecture.md` and `docs/data-model.md`.
 - **Planning decision — 2026-10-15:** Create this checklist from the product bible
   using the simple template. No separate FAQ is needed for the current milestone.
 - **Dependency:** Later implementation depends on the contracts and policy

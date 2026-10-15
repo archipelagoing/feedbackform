@@ -296,7 +296,13 @@ Confirmed pilot rule (user selection, October 15, 2026): all four participants
 must explicitly support or support with reservations. Reservations remain visible.
 Missing responses, abstention, requests for changes, and opposition do not satisfy
 the rule. Reviews must apply to the exact proposal version being accepted.
-Decision-recording authority and final review-state labels remain to be settled.
+The user accepted the following pilot defaults on October 15, 2026: review states
+are support, support with reservations, request changes, oppose, and abstain.
+The workspace owner records a decision only after the approval rule passes.
+All four must explicitly accept a requirement before it becomes binding on the
+group; incompatible constraints require human revision rather than silent relaxation.
+Participants correct their own preference interpretations; generated proposals and
+ticket breakdowns remain drafts until a human reviews and authorizes publication.
 This pilot choice is not a claim that every team should use the same rule.
 10. Traceability and explainability
 Every synthesis should include a Why this feature? view with:
@@ -312,24 +318,13 @@ Status: Proposed synthesis; not yet approved by all participants.
 
 The explanation must be generated from stored references, not fabricated after the fact.
 11. Suggested data model
-A relational database with JSON fields for model outputs is sufficient initially.
-Entity	Key fields
-users	id, display_name, created_at
-workspaces	id, title, goal, owner_id, decision_rule, status
-memberships	workspace_id, user_id, role, joined_at
-ideas	id, workspace_id, author_id, title, body, status, parent_idea_id, version
-idea_versions	id, idea_id, body_snapshot, editor_id, created_at
-annotations	id, idea_id, author_id, quoted_text, anchor_json, reaction, body, parent_annotation_id
-preferences	id, user_id, workspace_id, statement, kind, strength, status, source_ref, confidence_note
-themes	id, workspace_id, label, description, version
-theme_evidence	theme_id, source_type, source_id
-tensions	id, workspace_id, description, status, evidence_json
-proposals	id, workspace_id, title, body, created_by_type, status, version
-proposal_features	id, proposal_id, feature_text, origin_type, source_refs_json
-reviews	id, proposal_id, user_id, stance, reservations, created_at
-decisions	id, workspace_id, proposal_id, rule_snapshot, outcome, rationale, decided_at
-agent_runs	id, workspace_id, workflow_type, model, prompt_version, status, token_usage, duration_ms
-agent_events	id, run_id, stage, input_refs, output_ref, error, created_at
+Implementation contracts selected October 15, 2026 are in
+[docs/data-model.md](docs/data-model.md), superseding the initial illustrative table.
+The relational model uses immutable source/proposal versions, append-only
+preference and review history, explicit four-person constraint acceptance,
+frozen analysis manifests, and decision records tied to exact review events.
+GitHub publication uses immutable authorized ticket batches and per-item outcomes.
+These are definitions; executable schemas and migrations are not implemented yet.
 
 
 11.1 Data integrity
@@ -428,6 +423,11 @@ Course clarification, October 15, 2026: the user's “no” to the training/fine
 question is interpreted as no mandatory training or fine-tuning. Plan around
 evaluated LLM orchestration; remaining grading, submission, and deployment
 requirements are not established by that answer.
+The subsequently supplied `project-requirements.pdf` (page 1) offers research and
+application avenues with the same score breakdown. It does not explicitly require
+model training/fine-tuning or a hosted deployment. It requires an open-access
+project GitHub repository link in the report. Additional Canvas/instructor guidance
+has not been reviewed; do not infer that this PDF establishes every grading criterion.
 15.1 Evaluation datasets
 - Synthetic controlled cases: Known preferences, hard constraints, contradictory statements, missing votes, and feasible/infeasible combinations.
 - Human-annotated cases: Real team comments with independently confirmed preference labels.
@@ -467,15 +467,17 @@ Test whether added agent complexity materially improves quality relative to late
 - Never claim “consensus achieved” based solely on AI-estimated utilities.
 16. MVP versus later releases
 16.1 MVP — build this first
-- Four-person workspace with basic authentication or a controlled pilot login.
+Scope accepted by the user on October 15, 2026; this supersedes the broader
+initial MVP where noted. Implementation remains outstanding.
+- One four-person workspace with controlled participant accounts.
 - Quick thought and idea submission.
-- Plain-text/markdown idea detail pages.
+- Plain-text idea detail pages.
 - Highlight-to-comment annotation with stable anchoring.
-- Comment threads and basic reactions.
+- Whole-idea and passage comments; threaded replies and quick reactions are deferred.
 - Structured preference extraction with source references.
 - Human correction of extracted preferences.
 - Agreement/tension summary with citations to comments.
-- Generation of two or three alternative proposals.
+- Generation of two distinct alternative proposals.
 - Proposal review with explicit per-person stance.
 - Simple decision record and markdown export.
 - Real ticketing-system integration (required by the user on October 15, 2026).
@@ -485,6 +487,7 @@ Test whether added agent complexity materially improves quality relative to late
   are deferred. See `todo.md` §§1 and 6.1.
 - Logging and an evaluation harness.
 16.2 Phase 2 — only after the MVP works
+- Threaded replies and optional quick reactions.
 - PDF import with robust passage anchoring.
 - Rich-text editor and collaborative live editing.
 - Visual idea graph and relationship exploration.
@@ -510,11 +513,16 @@ Test whether added agent complexity materially improves quality relative to late
 - Training a foundation model from scratch.
 17. Technical implementation proposal
 17.1 Pragmatic stack
-- Frontend: React/Next.js for reliable passage selection and threaded comments; Streamlit only if rapid prototyping is prioritized over annotation UX.
-- Backend: Python FastAPI.
-- Database: SQLite for pilot; PostgreSQL if deployment/multi-user concurrency requires it.
+Selected October 15, 2026; see [docs/architecture.md](docs/architecture.md) for
+boundaries, environment, run execution, and implementation references.
+- Frontend: Next.js App Router, React, TypeScript, and plain CSS.
+- Backend: Python FastAPI with Pydantic v2 boundary validation.
+- Database: SQLite with SQLAlchemy 2 and Alembic migrations for the controlled
+  pilot; revisit PostgreSQL for multi-instance or sustained concurrent writes.
 - AI: LLM API with structured JSON outputs and schema validation.
-- Orchestration: Explicit Python workflow first; LangGraph if durable state and branching justify it.
+- Orchestration: Explicit Python workflow stages; no agent framework initially.
+- Ticketing: Server-side GitHub REST adapter, one configured repository, reviewed
+  ticket drafts, immutable publication authorization, and retry reconciliation.
 - Retrieval: Start with SQL/source-linked text retrieval; add embeddings/vector search only if semantic retrieval measurably helps.
 - Testing: pytest for backend and agent stages; Playwright for essential UI flows.
 - Observability: Prompt versions, agent runs, structured events, tool results, token/cost logging.
@@ -543,12 +551,26 @@ Member	Primary responsibility	Deliverables
 
 Shared responsibility: Integration, testing, prompt review, academic write-up, and demo. No one should be relegated to presentation-only work. If the course strongly prioritizes AI work over UI, keep frontend scope extremely small and redistribute effort toward benchmarking and agent reliability.
 19. Delivery plan
-Scheduling note: The user confirmed November 22, 2026 as the course deadline on
-October 15, 2026, superseding the earlier November 21 planning target. Submission
-time and timezone, delivery requirements, and deployment environment remain open.
-The checkpoints in `todo.md` §1 include the required ticketing integration;
-the five-week plan below remains a high-level allocation to reconcile with them.
-Compressed five-week plan
+Schedule authority: `project-requirements.pdf`, page 1, supplied October 15, 2026.
+The user instructed us to follow the PDF, superseding the earlier November 22
+deadline and November 21 planning target. All dates below are in 2026; the PDF
+does not specify a timezone.
+- October 22, 3pm: one teammate registers the team on Canvas.
+- November 12, in lecture: proposal presentation, at most five minutes. Upload
+  slides by 3pm; cover the problem, existing solutions, and proposed solution.
+- November 12, 3pm: proposal PDF, at most two pages, essentially the same content
+  as the presentation; worth 10 points.
+- December 3, in lecture: final presentation, at most five minutes. Upload slides
+  by 3pm; cover the problem, solution, and how well it addresses the problem;
+  worth 10 points.
+- December 17, 23:59: final report PDF in official ACL format, at most four main
+  pages plus unlimited references and appendix, including an open-access project
+  GitHub repository link; worth 20 points.
+The PDF does not separately assign points to the proposal presentation. See
+`todo.md` §§1 and 8 for checkpoints and deliverable tasks. November 22 is only a
+proposed internal pilot/evaluation target, not a course deadline. Deployment needs
+and any additional course guidance remain open.
+Initial five-week build allocation — proposed internal plan
 Week 1 — Foundation
 Define user stories and schemas; build idea creation, comments, workspace persistence; assemble first labeled examples.
 Week 2 — Preference intelligence
@@ -598,17 +620,18 @@ Failure conditions
 22. Open product decisions
 These questions are intentionally unresolved:
 1. Should a workspace default to open discussion or independent feedback before others' reactions become visible?
-2. Approval requires all four to support or support with reservations (confirmed
-   October 15, 2026). What final review-state labels and decision-recording
-   authority should the pilot use?
-3. How much structure should be required when someone marks a preference “essential”?
+2. Resolved October 15, 2026: all four must support or support with reservations;
+   review states and workspace-owner decision recording are defined in §9.5.
+3. All four must accept a requirement before it becomes binding (§9.5). How much
+   structure should be required when someone marks a personal preference “essential”?
 4. Should the AI ask clarifying questions immediately or collect them into a review queue?
 5. Should participants be able to submit anonymous feedback? If so, how is provenance protected?
 6. Which PDF formats must the first release support, if any?
 7. Should generated proposals be editable directly, fork-only, or both?
 8. What is the minimum useful set of metrics for the course rubric?
-9. The course deadline is confirmed as November 22, 2026. What are the submission
-   time/timezone, required artifacts, and deployment environment?
+9. Course dates and required artifacts follow `project-requirements.pdf` and §19.
+   What timezone applies, is there additional Canvas/instructor guidance, and
+   what environment should the team use for its demonstration?
 10. How will the team collect genuine participant judgments for evaluation without contaminating the test set?
 11. Which controlled GitHub repository and authentication setup will the pilot use?
     GitHub Issues with outbound implementation tickets from approved proposals is
