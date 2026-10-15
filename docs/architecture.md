@@ -1,7 +1,10 @@
 # FeedbackForm implementation architecture
 
-Status: Selected implementation direction, 2026-10-15. No application is
-scaffolded yet. Product intent is in [projBible.md](../projBible.md); the concrete
+Status: Authenticated idea capture implemented, 2026-10-15. The web login/workspace
+UI, session endpoints, member-scoped idea routes, schema artifacts, database
+records, and initial migration exist. Annotations, AI execution, proposal reviews,
+decisions, and GitHub publication are pending.
+Product intent is in [projBible.md](../projBible.md); the concrete
 record contracts are in [data-model.md](data-model.md).
 
 ## Stack decision
@@ -22,10 +25,10 @@ the pilot store; revisit PostgreSQL if the team needs multiple API/worker instan
 or sustained concurrent writers. No vector database, agent framework, message
 broker, or separate integration platform is needed for the initial workflow.
 
-Target the existing Node 24 environment and Python 3.13+; the current local Python
-is 3.14.7, so scaffolding must verify dependency compatibility before pinning a
-supported interpreter. Resolve exact library versions and commit lockfiles during
-scaffolding, rather than claiming uninstalled dependencies are tested.
+Target Node 24 and Python 3.13–3.14. Dependency installation and backend checks
+passed on the existing Node 24.10.0/Python 3.14.7 environment. Exact dependency
+resolutions are in `web/package-lock.json` and `backend/uv.lock`; Python 3.13 is
+allowed by package metadata but has not been tested locally.
 
 Initial verified-browser target will be desktop Chrome/Chromium on macOS, with
 keyboard operation. Mobile and other browsers remain unverified until checked.
@@ -38,7 +41,8 @@ FastAPI is the single authority for reads, writes, sessions, access checks, and
 workflow state; Next.js does not implement a second copy of the business rules.
 No database file or model/GitHub credential is available to browser code.
 
-Proposed source layout for the next scaffolding task:
+Source layout (workflow, integration, and evaluation folders will be added when
+their implementation starts):
 
 ```text
 web/                         Next.js UI and generated API types
@@ -58,8 +62,15 @@ command. Give each an independent login secret, store only password hashes, and
 use opaque server-side sessions with HttpOnly cookies. Do not use a browser-supplied
 `user_id` as authentication. The authenticated identity supplies actors for all
 commands. Credentials and session rows stay outside exports and model inputs.
-Authentication, CSRF protection, and authorization still require implementation
-and verification before the pilot can be called multi-user ready.
+Implemented in `app/auth.py`, `app/api/routes.py`, and `app/seed.py`: salted scrypt
+hashes, hashed random session tokens, eight-hour expiry, logout revocation,
+HttpOnly/SameSite cookies, explicit allowed Origin checks, and a session-bound
+CSRF header. Login uses a custom browser header plus Origin validation. API
+responses disable caching. A bounded per-peer login limiter applies to the local
+single process. See README for environment options and the one-time seed command.
+Each implemented product route checks the authenticated actor's workspace membership.
+Idea edits also require authorship and an expected version. The test suite covers
+these boundaries; future feature routes must apply the same protection.
 
 ## Run execution and freshness
 
@@ -148,5 +159,13 @@ Consulted official documentation on 2026-10-15:
 - [SQLAlchemy SQLite connection and foreign-key behavior](https://docs.sqlalchemy.org/en/20/dialects/sqlite.html)
 - [GitHub issue creation and permission requirements](https://docs.github.com/en/rest/issues/issues#create-an-issue)
 
-These sources inform the selection; compatibility, authentication, concurrency,
-and real GitHub publication have not yet been tested in this repository.
+These sources inform the selection. Installed dependencies are pinned in uv/npm
+lockfiles and run on the local Python 3.14/Node 24 environment. Backend tests cover
+migration integrity, authentication, workspace isolation, and version/evidence
+helpers. Simultaneous-write stress and real GitHub publication remain unverified.
+
+Additional implementation references consulted on 2026-10-15:
+
+- [FastAPI security and dependencies](https://fastapi.tiangolo.com/tutorial/security/)
+- [OWASP CSRF prevention](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html)
+- [Python scrypt hashing](https://docs.python.org/3/library/hashlib.html#hashlib.scrypt)

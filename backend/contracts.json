@@ -1,0 +1,5890 @@
+{
+  "Span": {
+    "additionalProperties": false,
+    "properties": {
+      "start_utf16": {
+        "minimum": 0,
+        "title": "Start Utf16",
+        "type": "integer"
+      },
+      "end_utf16": {
+        "exclusiveMinimum": 0,
+        "title": "End Utf16",
+        "type": "integer"
+      },
+      "quote": {
+        "maxLength": 20000,
+        "minLength": 1,
+        "pattern": "\\S",
+        "title": "Quote",
+        "type": "string"
+      },
+      "prefix": {
+        "default": "",
+        "maxLength": 200,
+        "title": "Prefix",
+        "type": "string"
+      },
+      "suffix": {
+        "default": "",
+        "maxLength": 200,
+        "title": "Suffix",
+        "type": "string"
+      }
+    },
+    "required": [
+      "start_utf16",
+      "end_utf16",
+      "quote"
+    ],
+    "title": "Span",
+    "type": "object"
+  },
+  "IdeaEvidence": {
+    "$defs": {
+      "Span": {
+        "additionalProperties": false,
+        "properties": {
+          "start_utf16": {
+            "minimum": 0,
+            "title": "Start Utf16",
+            "type": "integer"
+          },
+          "end_utf16": {
+            "exclusiveMinimum": 0,
+            "title": "End Utf16",
+            "type": "integer"
+          },
+          "quote": {
+            "maxLength": 20000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Quote",
+            "type": "string"
+          },
+          "prefix": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Prefix",
+            "type": "string"
+          },
+          "suffix": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Suffix",
+            "type": "string"
+          }
+        },
+        "required": [
+          "start_utf16",
+          "end_utf16",
+          "quote"
+        ],
+        "title": "Span",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "kind": {
+        "const": "idea_span",
+        "title": "Kind",
+        "type": "string"
+      },
+      "idea_version_id": {
+        "format": "uuid",
+        "title": "Idea Version Id",
+        "type": "string"
+      },
+      "span": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/Span"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null
+      }
+    },
+    "required": [
+      "kind",
+      "idea_version_id"
+    ],
+    "title": "IdeaEvidence",
+    "type": "object"
+  },
+  "AnnotationEvidence": {
+    "additionalProperties": false,
+    "properties": {
+      "kind": {
+        "const": "annotation",
+        "title": "Kind",
+        "type": "string"
+      },
+      "annotation_version_id": {
+        "format": "uuid",
+        "title": "Annotation Version Id",
+        "type": "string"
+      }
+    },
+    "required": [
+      "kind",
+      "annotation_version_id"
+    ],
+    "title": "AnnotationEvidence",
+    "type": "object"
+  },
+  "PreferenceEvidence": {
+    "additionalProperties": false,
+    "properties": {
+      "kind": {
+        "const": "preference",
+        "title": "Kind",
+        "type": "string"
+      },
+      "preference_revision_id": {
+        "format": "uuid",
+        "title": "Preference Revision Id",
+        "type": "string"
+      }
+    },
+    "required": [
+      "kind",
+      "preference_revision_id"
+    ],
+    "title": "PreferenceEvidence",
+    "type": "object"
+  },
+  "ConstraintEvidence": {
+    "additionalProperties": false,
+    "properties": {
+      "kind": {
+        "const": "constraint",
+        "title": "Kind",
+        "type": "string"
+      },
+      "constraint_revision_id": {
+        "format": "uuid",
+        "title": "Constraint Revision Id",
+        "type": "string"
+      }
+    },
+    "required": [
+      "kind",
+      "constraint_revision_id"
+    ],
+    "title": "ConstraintEvidence",
+    "type": "object"
+  },
+  "IdeaCreate": {
+    "additionalProperties": false,
+    "properties": {
+      "title": {
+        "anyOf": [
+          {
+            "maxLength": 200,
+            "minLength": 1,
+            "pattern": "\\S",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Title"
+      },
+      "body": {
+        "maxLength": 20000,
+        "minLength": 1,
+        "pattern": "\\S",
+        "title": "Body",
+        "type": "string"
+      }
+    },
+    "required": [
+      "body"
+    ],
+    "title": "IdeaCreate",
+    "type": "object"
+  },
+  "IdeaEdit": {
+    "additionalProperties": false,
+    "properties": {
+      "title": {
+        "anyOf": [
+          {
+            "maxLength": 200,
+            "minLength": 1,
+            "pattern": "\\S",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Title"
+      },
+      "body": {
+        "maxLength": 20000,
+        "minLength": 1,
+        "pattern": "\\S",
+        "title": "Body",
+        "type": "string"
+      },
+      "expected_version_id": {
+        "format": "uuid",
+        "title": "Expected Version Id",
+        "type": "string"
+      }
+    },
+    "required": [
+      "body",
+      "expected_version_id"
+    ],
+    "title": "IdeaEdit",
+    "type": "object"
+  },
+  "AnnotationCreate": {
+    "$defs": {
+      "Span": {
+        "additionalProperties": false,
+        "properties": {
+          "start_utf16": {
+            "minimum": 0,
+            "title": "Start Utf16",
+            "type": "integer"
+          },
+          "end_utf16": {
+            "exclusiveMinimum": 0,
+            "title": "End Utf16",
+            "type": "integer"
+          },
+          "quote": {
+            "maxLength": 20000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Quote",
+            "type": "string"
+          },
+          "prefix": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Prefix",
+            "type": "string"
+          },
+          "suffix": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Suffix",
+            "type": "string"
+          }
+        },
+        "required": [
+          "start_utf16",
+          "end_utf16",
+          "quote"
+        ],
+        "title": "Span",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "idea_version_id": {
+        "format": "uuid",
+        "title": "Idea Version Id",
+        "type": "string"
+      },
+      "anchor": {
+        "enum": [
+          "whole_idea",
+          "passage"
+        ],
+        "title": "Anchor",
+        "type": "string"
+      },
+      "span": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/Span"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null
+      },
+      "body": {
+        "maxLength": 20000,
+        "minLength": 1,
+        "pattern": "\\S",
+        "title": "Body",
+        "type": "string"
+      }
+    },
+    "required": [
+      "idea_version_id",
+      "anchor",
+      "body"
+    ],
+    "title": "AnnotationCreate",
+    "type": "object"
+  },
+  "PreferenceSuggestion": {
+    "$defs": {
+      "AnnotationEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "annotation",
+            "title": "Kind",
+            "type": "string"
+          },
+          "annotation_version_id": {
+            "format": "uuid",
+            "title": "Annotation Version Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "annotation_version_id"
+        ],
+        "title": "AnnotationEvidence",
+        "type": "object"
+      },
+      "ConstraintEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "constraint",
+            "title": "Kind",
+            "type": "string"
+          },
+          "constraint_revision_id": {
+            "format": "uuid",
+            "title": "Constraint Revision Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "constraint_revision_id"
+        ],
+        "title": "ConstraintEvidence",
+        "type": "object"
+      },
+      "IdeaEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "idea_span",
+            "title": "Kind",
+            "type": "string"
+          },
+          "idea_version_id": {
+            "format": "uuid",
+            "title": "Idea Version Id",
+            "type": "string"
+          },
+          "span": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/Span"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          }
+        },
+        "required": [
+          "kind",
+          "idea_version_id"
+        ],
+        "title": "IdeaEvidence",
+        "type": "object"
+      },
+      "PreferenceEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "preference",
+            "title": "Kind",
+            "type": "string"
+          },
+          "preference_revision_id": {
+            "format": "uuid",
+            "title": "Preference Revision Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "preference_revision_id"
+        ],
+        "title": "PreferenceEvidence",
+        "type": "object"
+      },
+      "Span": {
+        "additionalProperties": false,
+        "properties": {
+          "start_utf16": {
+            "minimum": 0,
+            "title": "Start Utf16",
+            "type": "integer"
+          },
+          "end_utf16": {
+            "exclusiveMinimum": 0,
+            "title": "End Utf16",
+            "type": "integer"
+          },
+          "quote": {
+            "maxLength": 20000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Quote",
+            "type": "string"
+          },
+          "prefix": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Prefix",
+            "type": "string"
+          },
+          "suffix": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Suffix",
+            "type": "string"
+          }
+        },
+        "required": [
+          "start_utf16",
+          "end_utf16",
+          "quote"
+        ],
+        "title": "Span",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "participant_id": {
+        "format": "uuid",
+        "title": "Participant Id",
+        "type": "string"
+      },
+      "statement": {
+        "maxLength": 2000,
+        "minLength": 1,
+        "pattern": "\\S",
+        "title": "Statement",
+        "type": "string"
+      },
+      "kind": {
+        "enum": [
+          "desire",
+          "concern",
+          "constraint",
+          "question",
+          "suggestion"
+        ],
+        "title": "Kind",
+        "type": "string"
+      },
+      "evidence": {
+        "items": {
+          "discriminator": {
+            "mapping": {
+              "annotation": "#/$defs/AnnotationEvidence",
+              "constraint": "#/$defs/ConstraintEvidence",
+              "idea_span": "#/$defs/IdeaEvidence",
+              "preference": "#/$defs/PreferenceEvidence"
+            },
+            "propertyName": "kind"
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/IdeaEvidence"
+            },
+            {
+              "$ref": "#/$defs/AnnotationEvidence"
+            },
+            {
+              "$ref": "#/$defs/PreferenceEvidence"
+            },
+            {
+              "$ref": "#/$defs/ConstraintEvidence"
+            }
+          ]
+        },
+        "maxItems": 100,
+        "minItems": 1,
+        "title": "Evidence",
+        "type": "array"
+      },
+      "uncertainty_note": {
+        "anyOf": [
+          {
+            "maxLength": 2000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Uncertainty Note"
+      }
+    },
+    "required": [
+      "participant_id",
+      "statement",
+      "kind",
+      "evidence"
+    ],
+    "title": "PreferenceSuggestion",
+    "type": "object"
+  },
+  "PreferenceCorrection": {
+    "additionalProperties": false,
+    "properties": {
+      "expected_revision_id": {
+        "format": "uuid",
+        "title": "Expected Revision Id",
+        "type": "string"
+      },
+      "statement": {
+        "maxLength": 2000,
+        "minLength": 1,
+        "pattern": "\\S",
+        "title": "Statement",
+        "type": "string"
+      },
+      "kind": {
+        "enum": [
+          "desire",
+          "concern",
+          "constraint",
+          "question",
+          "suggestion"
+        ],
+        "title": "Kind",
+        "type": "string"
+      },
+      "strength": {
+        "anyOf": [
+          {
+            "enum": [
+              "nice_to_have",
+              "important",
+              "essential"
+            ],
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Strength"
+      },
+      "action": {
+        "enum": [
+          "confirm",
+          "correct",
+          "withdraw"
+        ],
+        "title": "Action",
+        "type": "string"
+      }
+    },
+    "required": [
+      "expected_revision_id",
+      "statement",
+      "kind",
+      "action"
+    ],
+    "title": "PreferenceCorrection",
+    "type": "object"
+  },
+  "ConstraintDraft": {
+    "$defs": {
+      "AnnotationEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "annotation",
+            "title": "Kind",
+            "type": "string"
+          },
+          "annotation_version_id": {
+            "format": "uuid",
+            "title": "Annotation Version Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "annotation_version_id"
+        ],
+        "title": "AnnotationEvidence",
+        "type": "object"
+      },
+      "ConstraintEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "constraint",
+            "title": "Kind",
+            "type": "string"
+          },
+          "constraint_revision_id": {
+            "format": "uuid",
+            "title": "Constraint Revision Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "constraint_revision_id"
+        ],
+        "title": "ConstraintEvidence",
+        "type": "object"
+      },
+      "IdeaEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "idea_span",
+            "title": "Kind",
+            "type": "string"
+          },
+          "idea_version_id": {
+            "format": "uuid",
+            "title": "Idea Version Id",
+            "type": "string"
+          },
+          "span": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/Span"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          }
+        },
+        "required": [
+          "kind",
+          "idea_version_id"
+        ],
+        "title": "IdeaEvidence",
+        "type": "object"
+      },
+      "PreferenceEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "preference",
+            "title": "Kind",
+            "type": "string"
+          },
+          "preference_revision_id": {
+            "format": "uuid",
+            "title": "Preference Revision Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "preference_revision_id"
+        ],
+        "title": "PreferenceEvidence",
+        "type": "object"
+      },
+      "Span": {
+        "additionalProperties": false,
+        "properties": {
+          "start_utf16": {
+            "minimum": 0,
+            "title": "Start Utf16",
+            "type": "integer"
+          },
+          "end_utf16": {
+            "exclusiveMinimum": 0,
+            "title": "End Utf16",
+            "type": "integer"
+          },
+          "quote": {
+            "maxLength": 20000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Quote",
+            "type": "string"
+          },
+          "prefix": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Prefix",
+            "type": "string"
+          },
+          "suffix": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Suffix",
+            "type": "string"
+          }
+        },
+        "required": [
+          "start_utf16",
+          "end_utf16",
+          "quote"
+        ],
+        "title": "Span",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "statement": {
+        "maxLength": 2000,
+        "minLength": 1,
+        "pattern": "\\S",
+        "title": "Statement",
+        "type": "string"
+      },
+      "evidence": {
+        "items": {
+          "discriminator": {
+            "mapping": {
+              "annotation": "#/$defs/AnnotationEvidence",
+              "constraint": "#/$defs/ConstraintEvidence",
+              "idea_span": "#/$defs/IdeaEvidence",
+              "preference": "#/$defs/PreferenceEvidence"
+            },
+            "propertyName": "kind"
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/IdeaEvidence"
+            },
+            {
+              "$ref": "#/$defs/AnnotationEvidence"
+            },
+            {
+              "$ref": "#/$defs/PreferenceEvidence"
+            },
+            {
+              "$ref": "#/$defs/ConstraintEvidence"
+            }
+          ]
+        },
+        "maxItems": 100,
+        "title": "Evidence",
+        "type": "array"
+      }
+    },
+    "required": [
+      "statement"
+    ],
+    "title": "ConstraintDraft",
+    "type": "object"
+  },
+  "ConstraintResponseCreate": {
+    "additionalProperties": false,
+    "properties": {
+      "constraint_revision_id": {
+        "format": "uuid",
+        "title": "Constraint Revision Id",
+        "type": "string"
+      },
+      "response": {
+        "enum": [
+          "accept",
+          "reject",
+          "withdraw_acceptance"
+        ],
+        "title": "Response",
+        "type": "string"
+      },
+      "expected_sequence": {
+        "minimum": 0,
+        "title": "Expected Sequence",
+        "type": "integer"
+      }
+    },
+    "required": [
+      "constraint_revision_id",
+      "response",
+      "expected_sequence"
+    ],
+    "title": "ConstraintResponseCreate",
+    "type": "object"
+  },
+  "PolicyContract": {
+    "additionalProperties": false,
+    "properties": {
+      "required_user_ids": {
+        "items": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "maxItems": 4,
+        "minItems": 4,
+        "title": "Required User Ids",
+        "type": "array"
+      },
+      "approval_rule": {
+        "const": "all_support_or_reservations",
+        "default": "all_support_or_reservations",
+        "title": "Approval Rule",
+        "type": "string"
+      },
+      "constraint_rule": {
+        "const": "all_accept",
+        "default": "all_accept",
+        "title": "Constraint Rule",
+        "type": "string"
+      }
+    },
+    "required": [
+      "required_user_ids"
+    ],
+    "title": "PolicyContract",
+    "type": "object"
+  },
+  "AnalysisSuggestion": {
+    "$defs": {
+      "AnnotationEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "annotation",
+            "title": "Kind",
+            "type": "string"
+          },
+          "annotation_version_id": {
+            "format": "uuid",
+            "title": "Annotation Version Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "annotation_version_id"
+        ],
+        "title": "AnnotationEvidence",
+        "type": "object"
+      },
+      "ConstraintEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "constraint",
+            "title": "Kind",
+            "type": "string"
+          },
+          "constraint_revision_id": {
+            "format": "uuid",
+            "title": "Constraint Revision Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "constraint_revision_id"
+        ],
+        "title": "ConstraintEvidence",
+        "type": "object"
+      },
+      "IdeaEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "idea_span",
+            "title": "Kind",
+            "type": "string"
+          },
+          "idea_version_id": {
+            "format": "uuid",
+            "title": "Idea Version Id",
+            "type": "string"
+          },
+          "span": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/Span"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          }
+        },
+        "required": [
+          "kind",
+          "idea_version_id"
+        ],
+        "title": "IdeaEvidence",
+        "type": "object"
+      },
+      "PreferenceEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "preference",
+            "title": "Kind",
+            "type": "string"
+          },
+          "preference_revision_id": {
+            "format": "uuid",
+            "title": "Preference Revision Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "preference_revision_id"
+        ],
+        "title": "PreferenceEvidence",
+        "type": "object"
+      },
+      "Span": {
+        "additionalProperties": false,
+        "properties": {
+          "start_utf16": {
+            "minimum": 0,
+            "title": "Start Utf16",
+            "type": "integer"
+          },
+          "end_utf16": {
+            "exclusiveMinimum": 0,
+            "title": "End Utf16",
+            "type": "integer"
+          },
+          "quote": {
+            "maxLength": 20000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Quote",
+            "type": "string"
+          },
+          "prefix": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Prefix",
+            "type": "string"
+          },
+          "suffix": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Suffix",
+            "type": "string"
+          }
+        },
+        "required": [
+          "start_utf16",
+          "end_utf16",
+          "quote"
+        ],
+        "title": "Span",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "kind": {
+        "enum": [
+          "shared_priority",
+          "distinctive_interest",
+          "tension",
+          "question"
+        ],
+        "title": "Kind",
+        "type": "string"
+      },
+      "statement": {
+        "maxLength": 2000,
+        "minLength": 1,
+        "pattern": "\\S",
+        "title": "Statement",
+        "type": "string"
+      },
+      "evidence": {
+        "items": {
+          "discriminator": {
+            "mapping": {
+              "annotation": "#/$defs/AnnotationEvidence",
+              "constraint": "#/$defs/ConstraintEvidence",
+              "idea_span": "#/$defs/IdeaEvidence",
+              "preference": "#/$defs/PreferenceEvidence"
+            },
+            "propertyName": "kind"
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/IdeaEvidence"
+            },
+            {
+              "$ref": "#/$defs/AnnotationEvidence"
+            },
+            {
+              "$ref": "#/$defs/PreferenceEvidence"
+            },
+            {
+              "$ref": "#/$defs/ConstraintEvidence"
+            }
+          ]
+        },
+        "maxItems": 100,
+        "minItems": 1,
+        "title": "Evidence",
+        "type": "array"
+      },
+      "uncertainty_note": {
+        "anyOf": [
+          {
+            "maxLength": 2000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Uncertainty Note"
+      }
+    },
+    "required": [
+      "kind",
+      "statement",
+      "evidence"
+    ],
+    "title": "AnalysisSuggestion",
+    "type": "object"
+  },
+  "FeatureDraft": {
+    "$defs": {
+      "AnnotationEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "annotation",
+            "title": "Kind",
+            "type": "string"
+          },
+          "annotation_version_id": {
+            "format": "uuid",
+            "title": "Annotation Version Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "annotation_version_id"
+        ],
+        "title": "AnnotationEvidence",
+        "type": "object"
+      },
+      "ConstraintEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "constraint",
+            "title": "Kind",
+            "type": "string"
+          },
+          "constraint_revision_id": {
+            "format": "uuid",
+            "title": "Constraint Revision Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "constraint_revision_id"
+        ],
+        "title": "ConstraintEvidence",
+        "type": "object"
+      },
+      "IdeaEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "idea_span",
+            "title": "Kind",
+            "type": "string"
+          },
+          "idea_version_id": {
+            "format": "uuid",
+            "title": "Idea Version Id",
+            "type": "string"
+          },
+          "span": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/Span"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          }
+        },
+        "required": [
+          "kind",
+          "idea_version_id"
+        ],
+        "title": "IdeaEvidence",
+        "type": "object"
+      },
+      "PreferenceEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "preference",
+            "title": "Kind",
+            "type": "string"
+          },
+          "preference_revision_id": {
+            "format": "uuid",
+            "title": "Preference Revision Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "preference_revision_id"
+        ],
+        "title": "PreferenceEvidence",
+        "type": "object"
+      },
+      "Span": {
+        "additionalProperties": false,
+        "properties": {
+          "start_utf16": {
+            "minimum": 0,
+            "title": "Start Utf16",
+            "type": "integer"
+          },
+          "end_utf16": {
+            "exclusiveMinimum": 0,
+            "title": "End Utf16",
+            "type": "integer"
+          },
+          "quote": {
+            "maxLength": 20000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Quote",
+            "type": "string"
+          },
+          "prefix": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Prefix",
+            "type": "string"
+          },
+          "suffix": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Suffix",
+            "type": "string"
+          }
+        },
+        "required": [
+          "start_utf16",
+          "end_utf16",
+          "quote"
+        ],
+        "title": "Span",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "text": {
+        "maxLength": 2000,
+        "minLength": 1,
+        "pattern": "\\S",
+        "title": "Text",
+        "type": "string"
+      },
+      "origin": {
+        "enum": [
+          "human_source",
+          "combination",
+          "ai_suggestion"
+        ],
+        "title": "Origin",
+        "type": "string"
+      },
+      "evidence": {
+        "items": {
+          "discriminator": {
+            "mapping": {
+              "annotation": "#/$defs/AnnotationEvidence",
+              "constraint": "#/$defs/ConstraintEvidence",
+              "idea_span": "#/$defs/IdeaEvidence",
+              "preference": "#/$defs/PreferenceEvidence"
+            },
+            "propertyName": "kind"
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/IdeaEvidence"
+            },
+            {
+              "$ref": "#/$defs/AnnotationEvidence"
+            },
+            {
+              "$ref": "#/$defs/PreferenceEvidence"
+            },
+            {
+              "$ref": "#/$defs/ConstraintEvidence"
+            }
+          ]
+        },
+        "maxItems": 100,
+        "title": "Evidence",
+        "type": "array"
+      },
+      "rationale": {
+        "maxLength": 2000,
+        "minLength": 1,
+        "pattern": "\\S",
+        "title": "Rationale",
+        "type": "string"
+      }
+    },
+    "required": [
+      "text",
+      "origin",
+      "rationale"
+    ],
+    "title": "FeatureDraft",
+    "type": "object"
+  },
+  "CandidateDraft": {
+    "$defs": {
+      "AnnotationEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "annotation",
+            "title": "Kind",
+            "type": "string"
+          },
+          "annotation_version_id": {
+            "format": "uuid",
+            "title": "Annotation Version Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "annotation_version_id"
+        ],
+        "title": "AnnotationEvidence",
+        "type": "object"
+      },
+      "ConstraintEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "constraint",
+            "title": "Kind",
+            "type": "string"
+          },
+          "constraint_revision_id": {
+            "format": "uuid",
+            "title": "Constraint Revision Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "constraint_revision_id"
+        ],
+        "title": "ConstraintEvidence",
+        "type": "object"
+      },
+      "FeatureDraft": {
+        "additionalProperties": false,
+        "properties": {
+          "text": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Text",
+            "type": "string"
+          },
+          "origin": {
+            "enum": [
+              "human_source",
+              "combination",
+              "ai_suggestion"
+            ],
+            "title": "Origin",
+            "type": "string"
+          },
+          "evidence": {
+            "items": {
+              "discriminator": {
+                "mapping": {
+                  "annotation": "#/$defs/AnnotationEvidence",
+                  "constraint": "#/$defs/ConstraintEvidence",
+                  "idea_span": "#/$defs/IdeaEvidence",
+                  "preference": "#/$defs/PreferenceEvidence"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/IdeaEvidence"
+                },
+                {
+                  "$ref": "#/$defs/AnnotationEvidence"
+                },
+                {
+                  "$ref": "#/$defs/PreferenceEvidence"
+                },
+                {
+                  "$ref": "#/$defs/ConstraintEvidence"
+                }
+              ]
+            },
+            "maxItems": 100,
+            "title": "Evidence",
+            "type": "array"
+          },
+          "rationale": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Rationale",
+            "type": "string"
+          }
+        },
+        "required": [
+          "text",
+          "origin",
+          "rationale"
+        ],
+        "title": "FeatureDraft",
+        "type": "object"
+      },
+      "IdeaEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "idea_span",
+            "title": "Kind",
+            "type": "string"
+          },
+          "idea_version_id": {
+            "format": "uuid",
+            "title": "Idea Version Id",
+            "type": "string"
+          },
+          "span": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/Span"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          }
+        },
+        "required": [
+          "kind",
+          "idea_version_id"
+        ],
+        "title": "IdeaEvidence",
+        "type": "object"
+      },
+      "PreferenceEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "preference",
+            "title": "Kind",
+            "type": "string"
+          },
+          "preference_revision_id": {
+            "format": "uuid",
+            "title": "Preference Revision Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "preference_revision_id"
+        ],
+        "title": "PreferenceEvidence",
+        "type": "object"
+      },
+      "Span": {
+        "additionalProperties": false,
+        "properties": {
+          "start_utf16": {
+            "minimum": 0,
+            "title": "Start Utf16",
+            "type": "integer"
+          },
+          "end_utf16": {
+            "exclusiveMinimum": 0,
+            "title": "End Utf16",
+            "type": "integer"
+          },
+          "quote": {
+            "maxLength": 20000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Quote",
+            "type": "string"
+          },
+          "prefix": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Prefix",
+            "type": "string"
+          },
+          "suffix": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Suffix",
+            "type": "string"
+          }
+        },
+        "required": [
+          "start_utf16",
+          "end_utf16",
+          "quote"
+        ],
+        "title": "Span",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "title": {
+        "maxLength": 200,
+        "minLength": 1,
+        "pattern": "\\S",
+        "title": "Title",
+        "type": "string"
+      },
+      "summary": {
+        "maxLength": 2000,
+        "minLength": 1,
+        "pattern": "\\S",
+        "title": "Summary",
+        "type": "string"
+      },
+      "scope": {
+        "maxLength": 20000,
+        "minLength": 1,
+        "pattern": "\\S",
+        "title": "Scope",
+        "type": "string"
+      },
+      "assumptions": {
+        "items": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "pattern": "\\S",
+          "type": "string"
+        },
+        "maxItems": 30,
+        "title": "Assumptions",
+        "type": "array"
+      },
+      "exclusions": {
+        "items": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "pattern": "\\S",
+          "type": "string"
+        },
+        "maxItems": 30,
+        "title": "Exclusions",
+        "type": "array"
+      },
+      "unresolved_concerns": {
+        "items": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "pattern": "\\S",
+          "type": "string"
+        },
+        "maxItems": 100,
+        "title": "Unresolved Concerns",
+        "type": "array"
+      },
+      "features": {
+        "items": {
+          "$ref": "#/$defs/FeatureDraft"
+        },
+        "maxItems": 30,
+        "minItems": 1,
+        "title": "Features",
+        "type": "array"
+      }
+    },
+    "required": [
+      "title",
+      "summary",
+      "scope",
+      "assumptions",
+      "exclusions",
+      "unresolved_concerns",
+      "features"
+    ],
+    "title": "CandidateDraft",
+    "type": "object"
+  },
+  "ConstraintCheck": {
+    "$defs": {
+      "AnnotationEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "annotation",
+            "title": "Kind",
+            "type": "string"
+          },
+          "annotation_version_id": {
+            "format": "uuid",
+            "title": "Annotation Version Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "annotation_version_id"
+        ],
+        "title": "AnnotationEvidence",
+        "type": "object"
+      },
+      "ConstraintEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "constraint",
+            "title": "Kind",
+            "type": "string"
+          },
+          "constraint_revision_id": {
+            "format": "uuid",
+            "title": "Constraint Revision Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "constraint_revision_id"
+        ],
+        "title": "ConstraintEvidence",
+        "type": "object"
+      },
+      "IdeaEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "idea_span",
+            "title": "Kind",
+            "type": "string"
+          },
+          "idea_version_id": {
+            "format": "uuid",
+            "title": "Idea Version Id",
+            "type": "string"
+          },
+          "span": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/Span"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          }
+        },
+        "required": [
+          "kind",
+          "idea_version_id"
+        ],
+        "title": "IdeaEvidence",
+        "type": "object"
+      },
+      "PreferenceEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "preference",
+            "title": "Kind",
+            "type": "string"
+          },
+          "preference_revision_id": {
+            "format": "uuid",
+            "title": "Preference Revision Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "preference_revision_id"
+        ],
+        "title": "PreferenceEvidence",
+        "type": "object"
+      },
+      "Span": {
+        "additionalProperties": false,
+        "properties": {
+          "start_utf16": {
+            "minimum": 0,
+            "title": "Start Utf16",
+            "type": "integer"
+          },
+          "end_utf16": {
+            "exclusiveMinimum": 0,
+            "title": "End Utf16",
+            "type": "integer"
+          },
+          "quote": {
+            "maxLength": 20000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Quote",
+            "type": "string"
+          },
+          "prefix": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Prefix",
+            "type": "string"
+          },
+          "suffix": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Suffix",
+            "type": "string"
+          }
+        },
+        "required": [
+          "start_utf16",
+          "end_utf16",
+          "quote"
+        ],
+        "title": "Span",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "constraint_revision_id": {
+        "format": "uuid",
+        "title": "Constraint Revision Id",
+        "type": "string"
+      },
+      "status": {
+        "enum": [
+          "verified",
+          "estimated",
+          "violated",
+          "unknown"
+        ],
+        "title": "Status",
+        "type": "string"
+      },
+      "method": {
+        "enum": [
+          "deterministic",
+          "model",
+          "human"
+        ],
+        "title": "Method",
+        "type": "string"
+      },
+      "evidence": {
+        "items": {
+          "discriminator": {
+            "mapping": {
+              "annotation": "#/$defs/AnnotationEvidence",
+              "constraint": "#/$defs/ConstraintEvidence",
+              "idea_span": "#/$defs/IdeaEvidence",
+              "preference": "#/$defs/PreferenceEvidence"
+            },
+            "propertyName": "kind"
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/IdeaEvidence"
+            },
+            {
+              "$ref": "#/$defs/AnnotationEvidence"
+            },
+            {
+              "$ref": "#/$defs/PreferenceEvidence"
+            },
+            {
+              "$ref": "#/$defs/ConstraintEvidence"
+            }
+          ]
+        },
+        "maxItems": 100,
+        "title": "Evidence",
+        "type": "array"
+      },
+      "rationale": {
+        "maxLength": 2000,
+        "minLength": 1,
+        "pattern": "\\S",
+        "title": "Rationale",
+        "type": "string"
+      }
+    },
+    "required": [
+      "constraint_revision_id",
+      "status",
+      "method",
+      "evidence",
+      "rationale"
+    ],
+    "title": "ConstraintCheck",
+    "type": "object"
+  },
+  "AttributionFinding": {
+    "$defs": {
+      "AnnotationEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "annotation",
+            "title": "Kind",
+            "type": "string"
+          },
+          "annotation_version_id": {
+            "format": "uuid",
+            "title": "Annotation Version Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "annotation_version_id"
+        ],
+        "title": "AnnotationEvidence",
+        "type": "object"
+      },
+      "ConstraintEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "constraint",
+            "title": "Kind",
+            "type": "string"
+          },
+          "constraint_revision_id": {
+            "format": "uuid",
+            "title": "Constraint Revision Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "constraint_revision_id"
+        ],
+        "title": "ConstraintEvidence",
+        "type": "object"
+      },
+      "IdeaEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "idea_span",
+            "title": "Kind",
+            "type": "string"
+          },
+          "idea_version_id": {
+            "format": "uuid",
+            "title": "Idea Version Id",
+            "type": "string"
+          },
+          "span": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/Span"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          }
+        },
+        "required": [
+          "kind",
+          "idea_version_id"
+        ],
+        "title": "IdeaEvidence",
+        "type": "object"
+      },
+      "PreferenceEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "preference",
+            "title": "Kind",
+            "type": "string"
+          },
+          "preference_revision_id": {
+            "format": "uuid",
+            "title": "Preference Revision Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "preference_revision_id"
+        ],
+        "title": "PreferenceEvidence",
+        "type": "object"
+      },
+      "Span": {
+        "additionalProperties": false,
+        "properties": {
+          "start_utf16": {
+            "minimum": 0,
+            "title": "Start Utf16",
+            "type": "integer"
+          },
+          "end_utf16": {
+            "exclusiveMinimum": 0,
+            "title": "End Utf16",
+            "type": "integer"
+          },
+          "quote": {
+            "maxLength": 20000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Quote",
+            "type": "string"
+          },
+          "prefix": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Prefix",
+            "type": "string"
+          },
+          "suffix": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Suffix",
+            "type": "string"
+          }
+        },
+        "required": [
+          "start_utf16",
+          "end_utf16",
+          "quote"
+        ],
+        "title": "Span",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "feature_index": {
+        "exclusiveMaximum": 30,
+        "minimum": 0,
+        "title": "Feature Index",
+        "type": "integer"
+      },
+      "candidate_index": {
+        "enum": [
+          0,
+          1
+        ],
+        "title": "Candidate Index",
+        "type": "integer"
+      },
+      "explanation": {
+        "maxLength": 2000,
+        "minLength": 1,
+        "pattern": "\\S",
+        "title": "Explanation",
+        "type": "string"
+      },
+      "evidence": {
+        "items": {
+          "discriminator": {
+            "mapping": {
+              "annotation": "#/$defs/AnnotationEvidence",
+              "constraint": "#/$defs/ConstraintEvidence",
+              "idea_span": "#/$defs/IdeaEvidence",
+              "preference": "#/$defs/PreferenceEvidence"
+            },
+            "propertyName": "kind"
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/IdeaEvidence"
+            },
+            {
+              "$ref": "#/$defs/AnnotationEvidence"
+            },
+            {
+              "$ref": "#/$defs/PreferenceEvidence"
+            },
+            {
+              "$ref": "#/$defs/ConstraintEvidence"
+            }
+          ]
+        },
+        "maxItems": 100,
+        "title": "Evidence",
+        "type": "array"
+      }
+    },
+    "required": [
+      "feature_index",
+      "candidate_index",
+      "explanation",
+      "evidence"
+    ],
+    "title": "AttributionFinding",
+    "type": "object"
+  },
+  "InterpretOutput": {
+    "$defs": {
+      "AnnotationEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "annotation",
+            "title": "Kind",
+            "type": "string"
+          },
+          "annotation_version_id": {
+            "format": "uuid",
+            "title": "Annotation Version Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "annotation_version_id"
+        ],
+        "title": "AnnotationEvidence",
+        "type": "object"
+      },
+      "ConstraintEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "constraint",
+            "title": "Kind",
+            "type": "string"
+          },
+          "constraint_revision_id": {
+            "format": "uuid",
+            "title": "Constraint Revision Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "constraint_revision_id"
+        ],
+        "title": "ConstraintEvidence",
+        "type": "object"
+      },
+      "IdeaEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "idea_span",
+            "title": "Kind",
+            "type": "string"
+          },
+          "idea_version_id": {
+            "format": "uuid",
+            "title": "Idea Version Id",
+            "type": "string"
+          },
+          "span": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/Span"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          }
+        },
+        "required": [
+          "kind",
+          "idea_version_id"
+        ],
+        "title": "IdeaEvidence",
+        "type": "object"
+      },
+      "PreferenceEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "preference",
+            "title": "Kind",
+            "type": "string"
+          },
+          "preference_revision_id": {
+            "format": "uuid",
+            "title": "Preference Revision Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "preference_revision_id"
+        ],
+        "title": "PreferenceEvidence",
+        "type": "object"
+      },
+      "PreferenceSuggestion": {
+        "additionalProperties": false,
+        "properties": {
+          "participant_id": {
+            "format": "uuid",
+            "title": "Participant Id",
+            "type": "string"
+          },
+          "statement": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Statement",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "desire",
+              "concern",
+              "constraint",
+              "question",
+              "suggestion"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "evidence": {
+            "items": {
+              "discriminator": {
+                "mapping": {
+                  "annotation": "#/$defs/AnnotationEvidence",
+                  "constraint": "#/$defs/ConstraintEvidence",
+                  "idea_span": "#/$defs/IdeaEvidence",
+                  "preference": "#/$defs/PreferenceEvidence"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/IdeaEvidence"
+                },
+                {
+                  "$ref": "#/$defs/AnnotationEvidence"
+                },
+                {
+                  "$ref": "#/$defs/PreferenceEvidence"
+                },
+                {
+                  "$ref": "#/$defs/ConstraintEvidence"
+                }
+              ]
+            },
+            "maxItems": 100,
+            "minItems": 1,
+            "title": "Evidence",
+            "type": "array"
+          },
+          "uncertainty_note": {
+            "anyOf": [
+              {
+                "maxLength": 2000,
+                "minLength": 1,
+                "pattern": "\\S",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Uncertainty Note"
+          }
+        },
+        "required": [
+          "participant_id",
+          "statement",
+          "kind",
+          "evidence"
+        ],
+        "title": "PreferenceSuggestion",
+        "type": "object"
+      },
+      "Span": {
+        "additionalProperties": false,
+        "properties": {
+          "start_utf16": {
+            "minimum": 0,
+            "title": "Start Utf16",
+            "type": "integer"
+          },
+          "end_utf16": {
+            "exclusiveMinimum": 0,
+            "title": "End Utf16",
+            "type": "integer"
+          },
+          "quote": {
+            "maxLength": 20000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Quote",
+            "type": "string"
+          },
+          "prefix": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Prefix",
+            "type": "string"
+          },
+          "suffix": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Suffix",
+            "type": "string"
+          }
+        },
+        "required": [
+          "start_utf16",
+          "end_utf16",
+          "quote"
+        ],
+        "title": "Span",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "preferences": {
+        "items": {
+          "$ref": "#/$defs/PreferenceSuggestion"
+        },
+        "maxItems": 200,
+        "title": "Preferences",
+        "type": "array"
+      }
+    },
+    "required": [
+      "preferences"
+    ],
+    "title": "InterpretOutput",
+    "type": "object"
+  },
+  "AnalyzeOutput": {
+    "$defs": {
+      "AnalysisSuggestion": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "enum": [
+              "shared_priority",
+              "distinctive_interest",
+              "tension",
+              "question"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "statement": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Statement",
+            "type": "string"
+          },
+          "evidence": {
+            "items": {
+              "discriminator": {
+                "mapping": {
+                  "annotation": "#/$defs/AnnotationEvidence",
+                  "constraint": "#/$defs/ConstraintEvidence",
+                  "idea_span": "#/$defs/IdeaEvidence",
+                  "preference": "#/$defs/PreferenceEvidence"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/IdeaEvidence"
+                },
+                {
+                  "$ref": "#/$defs/AnnotationEvidence"
+                },
+                {
+                  "$ref": "#/$defs/PreferenceEvidence"
+                },
+                {
+                  "$ref": "#/$defs/ConstraintEvidence"
+                }
+              ]
+            },
+            "maxItems": 100,
+            "minItems": 1,
+            "title": "Evidence",
+            "type": "array"
+          },
+          "uncertainty_note": {
+            "anyOf": [
+              {
+                "maxLength": 2000,
+                "minLength": 1,
+                "pattern": "\\S",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Uncertainty Note"
+          }
+        },
+        "required": [
+          "kind",
+          "statement",
+          "evidence"
+        ],
+        "title": "AnalysisSuggestion",
+        "type": "object"
+      },
+      "AnnotationEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "annotation",
+            "title": "Kind",
+            "type": "string"
+          },
+          "annotation_version_id": {
+            "format": "uuid",
+            "title": "Annotation Version Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "annotation_version_id"
+        ],
+        "title": "AnnotationEvidence",
+        "type": "object"
+      },
+      "ConstraintEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "constraint",
+            "title": "Kind",
+            "type": "string"
+          },
+          "constraint_revision_id": {
+            "format": "uuid",
+            "title": "Constraint Revision Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "constraint_revision_id"
+        ],
+        "title": "ConstraintEvidence",
+        "type": "object"
+      },
+      "IdeaEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "idea_span",
+            "title": "Kind",
+            "type": "string"
+          },
+          "idea_version_id": {
+            "format": "uuid",
+            "title": "Idea Version Id",
+            "type": "string"
+          },
+          "span": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/Span"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          }
+        },
+        "required": [
+          "kind",
+          "idea_version_id"
+        ],
+        "title": "IdeaEvidence",
+        "type": "object"
+      },
+      "PreferenceEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "preference",
+            "title": "Kind",
+            "type": "string"
+          },
+          "preference_revision_id": {
+            "format": "uuid",
+            "title": "Preference Revision Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "preference_revision_id"
+        ],
+        "title": "PreferenceEvidence",
+        "type": "object"
+      },
+      "Span": {
+        "additionalProperties": false,
+        "properties": {
+          "start_utf16": {
+            "minimum": 0,
+            "title": "Start Utf16",
+            "type": "integer"
+          },
+          "end_utf16": {
+            "exclusiveMinimum": 0,
+            "title": "End Utf16",
+            "type": "integer"
+          },
+          "quote": {
+            "maxLength": 20000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Quote",
+            "type": "string"
+          },
+          "prefix": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Prefix",
+            "type": "string"
+          },
+          "suffix": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Suffix",
+            "type": "string"
+          }
+        },
+        "required": [
+          "start_utf16",
+          "end_utf16",
+          "quote"
+        ],
+        "title": "Span",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "items": {
+        "items": {
+          "$ref": "#/$defs/AnalysisSuggestion"
+        },
+        "maxItems": 100,
+        "title": "Items",
+        "type": "array"
+      }
+    },
+    "required": [
+      "items"
+    ],
+    "title": "AnalyzeOutput",
+    "type": "object"
+  },
+  "SynthesizeOutput": {
+    "$defs": {
+      "AnnotationEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "annotation",
+            "title": "Kind",
+            "type": "string"
+          },
+          "annotation_version_id": {
+            "format": "uuid",
+            "title": "Annotation Version Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "annotation_version_id"
+        ],
+        "title": "AnnotationEvidence",
+        "type": "object"
+      },
+      "CandidateDraft": {
+        "additionalProperties": false,
+        "properties": {
+          "title": {
+            "maxLength": 200,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Title",
+            "type": "string"
+          },
+          "summary": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Summary",
+            "type": "string"
+          },
+          "scope": {
+            "maxLength": 20000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Scope",
+            "type": "string"
+          },
+          "assumptions": {
+            "items": {
+              "maxLength": 2000,
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            "maxItems": 30,
+            "title": "Assumptions",
+            "type": "array"
+          },
+          "exclusions": {
+            "items": {
+              "maxLength": 2000,
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            "maxItems": 30,
+            "title": "Exclusions",
+            "type": "array"
+          },
+          "unresolved_concerns": {
+            "items": {
+              "maxLength": 2000,
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            "maxItems": 100,
+            "title": "Unresolved Concerns",
+            "type": "array"
+          },
+          "features": {
+            "items": {
+              "$ref": "#/$defs/FeatureDraft"
+            },
+            "maxItems": 30,
+            "minItems": 1,
+            "title": "Features",
+            "type": "array"
+          }
+        },
+        "required": [
+          "title",
+          "summary",
+          "scope",
+          "assumptions",
+          "exclusions",
+          "unresolved_concerns",
+          "features"
+        ],
+        "title": "CandidateDraft",
+        "type": "object"
+      },
+      "ConstraintEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "constraint",
+            "title": "Kind",
+            "type": "string"
+          },
+          "constraint_revision_id": {
+            "format": "uuid",
+            "title": "Constraint Revision Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "constraint_revision_id"
+        ],
+        "title": "ConstraintEvidence",
+        "type": "object"
+      },
+      "FeatureDraft": {
+        "additionalProperties": false,
+        "properties": {
+          "text": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Text",
+            "type": "string"
+          },
+          "origin": {
+            "enum": [
+              "human_source",
+              "combination",
+              "ai_suggestion"
+            ],
+            "title": "Origin",
+            "type": "string"
+          },
+          "evidence": {
+            "items": {
+              "discriminator": {
+                "mapping": {
+                  "annotation": "#/$defs/AnnotationEvidence",
+                  "constraint": "#/$defs/ConstraintEvidence",
+                  "idea_span": "#/$defs/IdeaEvidence",
+                  "preference": "#/$defs/PreferenceEvidence"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/IdeaEvidence"
+                },
+                {
+                  "$ref": "#/$defs/AnnotationEvidence"
+                },
+                {
+                  "$ref": "#/$defs/PreferenceEvidence"
+                },
+                {
+                  "$ref": "#/$defs/ConstraintEvidence"
+                }
+              ]
+            },
+            "maxItems": 100,
+            "title": "Evidence",
+            "type": "array"
+          },
+          "rationale": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Rationale",
+            "type": "string"
+          }
+        },
+        "required": [
+          "text",
+          "origin",
+          "rationale"
+        ],
+        "title": "FeatureDraft",
+        "type": "object"
+      },
+      "IdeaEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "idea_span",
+            "title": "Kind",
+            "type": "string"
+          },
+          "idea_version_id": {
+            "format": "uuid",
+            "title": "Idea Version Id",
+            "type": "string"
+          },
+          "span": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/Span"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          }
+        },
+        "required": [
+          "kind",
+          "idea_version_id"
+        ],
+        "title": "IdeaEvidence",
+        "type": "object"
+      },
+      "PreferenceEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "preference",
+            "title": "Kind",
+            "type": "string"
+          },
+          "preference_revision_id": {
+            "format": "uuid",
+            "title": "Preference Revision Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "preference_revision_id"
+        ],
+        "title": "PreferenceEvidence",
+        "type": "object"
+      },
+      "Span": {
+        "additionalProperties": false,
+        "properties": {
+          "start_utf16": {
+            "minimum": 0,
+            "title": "Start Utf16",
+            "type": "integer"
+          },
+          "end_utf16": {
+            "exclusiveMinimum": 0,
+            "title": "End Utf16",
+            "type": "integer"
+          },
+          "quote": {
+            "maxLength": 20000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Quote",
+            "type": "string"
+          },
+          "prefix": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Prefix",
+            "type": "string"
+          },
+          "suffix": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Suffix",
+            "type": "string"
+          }
+        },
+        "required": [
+          "start_utf16",
+          "end_utf16",
+          "quote"
+        ],
+        "title": "Span",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "candidates": {
+        "items": {
+          "$ref": "#/$defs/CandidateDraft"
+        },
+        "maxItems": 2,
+        "minItems": 2,
+        "title": "Candidates",
+        "type": "array"
+      }
+    },
+    "required": [
+      "candidates"
+    ],
+    "title": "SynthesizeOutput",
+    "type": "object"
+  },
+  "CritiqueOutput": {
+    "$defs": {
+      "AnnotationEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "annotation",
+            "title": "Kind",
+            "type": "string"
+          },
+          "annotation_version_id": {
+            "format": "uuid",
+            "title": "Annotation Version Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "annotation_version_id"
+        ],
+        "title": "AnnotationEvidence",
+        "type": "object"
+      },
+      "AttributionFinding": {
+        "additionalProperties": false,
+        "properties": {
+          "feature_index": {
+            "exclusiveMaximum": 30,
+            "minimum": 0,
+            "title": "Feature Index",
+            "type": "integer"
+          },
+          "candidate_index": {
+            "enum": [
+              0,
+              1
+            ],
+            "title": "Candidate Index",
+            "type": "integer"
+          },
+          "explanation": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Explanation",
+            "type": "string"
+          },
+          "evidence": {
+            "items": {
+              "discriminator": {
+                "mapping": {
+                  "annotation": "#/$defs/AnnotationEvidence",
+                  "constraint": "#/$defs/ConstraintEvidence",
+                  "idea_span": "#/$defs/IdeaEvidence",
+                  "preference": "#/$defs/PreferenceEvidence"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/IdeaEvidence"
+                },
+                {
+                  "$ref": "#/$defs/AnnotationEvidence"
+                },
+                {
+                  "$ref": "#/$defs/PreferenceEvidence"
+                },
+                {
+                  "$ref": "#/$defs/ConstraintEvidence"
+                }
+              ]
+            },
+            "maxItems": 100,
+            "title": "Evidence",
+            "type": "array"
+          }
+        },
+        "required": [
+          "feature_index",
+          "candidate_index",
+          "explanation",
+          "evidence"
+        ],
+        "title": "AttributionFinding",
+        "type": "object"
+      },
+      "ConstraintCheck": {
+        "additionalProperties": false,
+        "properties": {
+          "constraint_revision_id": {
+            "format": "uuid",
+            "title": "Constraint Revision Id",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "verified",
+              "estimated",
+              "violated",
+              "unknown"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "method": {
+            "enum": [
+              "deterministic",
+              "model",
+              "human"
+            ],
+            "title": "Method",
+            "type": "string"
+          },
+          "evidence": {
+            "items": {
+              "discriminator": {
+                "mapping": {
+                  "annotation": "#/$defs/AnnotationEvidence",
+                  "constraint": "#/$defs/ConstraintEvidence",
+                  "idea_span": "#/$defs/IdeaEvidence",
+                  "preference": "#/$defs/PreferenceEvidence"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/IdeaEvidence"
+                },
+                {
+                  "$ref": "#/$defs/AnnotationEvidence"
+                },
+                {
+                  "$ref": "#/$defs/PreferenceEvidence"
+                },
+                {
+                  "$ref": "#/$defs/ConstraintEvidence"
+                }
+              ]
+            },
+            "maxItems": 100,
+            "title": "Evidence",
+            "type": "array"
+          },
+          "rationale": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Rationale",
+            "type": "string"
+          }
+        },
+        "required": [
+          "constraint_revision_id",
+          "status",
+          "method",
+          "evidence",
+          "rationale"
+        ],
+        "title": "ConstraintCheck",
+        "type": "object"
+      },
+      "ConstraintEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "constraint",
+            "title": "Kind",
+            "type": "string"
+          },
+          "constraint_revision_id": {
+            "format": "uuid",
+            "title": "Constraint Revision Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "constraint_revision_id"
+        ],
+        "title": "ConstraintEvidence",
+        "type": "object"
+      },
+      "IdeaEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "idea_span",
+            "title": "Kind",
+            "type": "string"
+          },
+          "idea_version_id": {
+            "format": "uuid",
+            "title": "Idea Version Id",
+            "type": "string"
+          },
+          "span": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/Span"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          }
+        },
+        "required": [
+          "kind",
+          "idea_version_id"
+        ],
+        "title": "IdeaEvidence",
+        "type": "object"
+      },
+      "PreferenceEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "preference",
+            "title": "Kind",
+            "type": "string"
+          },
+          "preference_revision_id": {
+            "format": "uuid",
+            "title": "Preference Revision Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "preference_revision_id"
+        ],
+        "title": "PreferenceEvidence",
+        "type": "object"
+      },
+      "Span": {
+        "additionalProperties": false,
+        "properties": {
+          "start_utf16": {
+            "minimum": 0,
+            "title": "Start Utf16",
+            "type": "integer"
+          },
+          "end_utf16": {
+            "exclusiveMinimum": 0,
+            "title": "End Utf16",
+            "type": "integer"
+          },
+          "quote": {
+            "maxLength": 20000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Quote",
+            "type": "string"
+          },
+          "prefix": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Prefix",
+            "type": "string"
+          },
+          "suffix": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Suffix",
+            "type": "string"
+          }
+        },
+        "required": [
+          "start_utf16",
+          "end_utf16",
+          "quote"
+        ],
+        "title": "Span",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "constraint_checks": {
+        "items": {
+          "$ref": "#/$defs/ConstraintCheck"
+        },
+        "maxItems": 200,
+        "title": "Constraint Checks",
+        "type": "array"
+      },
+      "attribution_findings": {
+        "items": {
+          "$ref": "#/$defs/AttributionFinding"
+        },
+        "maxItems": 100,
+        "title": "Attribution Findings",
+        "type": "array"
+      },
+      "unresolved_concerns": {
+        "items": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "pattern": "\\S",
+          "type": "string"
+        },
+        "maxItems": 100,
+        "title": "Unresolved Concerns",
+        "type": "array"
+      },
+      "recommendation": {
+        "enum": [
+          "ready_for_human_review",
+          "revise",
+          "infeasible",
+          "needs_clarification"
+        ],
+        "title": "Recommendation",
+        "type": "string"
+      }
+    },
+    "required": [
+      "constraint_checks",
+      "attribution_findings",
+      "unresolved_concerns",
+      "recommendation"
+    ],
+    "title": "CritiqueOutput",
+    "type": "object"
+  },
+  "ReviewCreate": {
+    "additionalProperties": false,
+    "properties": {
+      "round_id": {
+        "format": "uuid",
+        "title": "Round Id",
+        "type": "string"
+      },
+      "stance": {
+        "enum": [
+          "support",
+          "support_with_reservations",
+          "request_changes",
+          "oppose",
+          "abstain"
+        ],
+        "title": "Stance",
+        "type": "string"
+      },
+      "reservations": {
+        "anyOf": [
+          {
+            "maxLength": 2000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Reservations"
+      },
+      "expected_sequence": {
+        "minimum": 0,
+        "title": "Expected Sequence",
+        "type": "integer"
+      }
+    },
+    "required": [
+      "round_id",
+      "stance",
+      "expected_sequence"
+    ],
+    "title": "ReviewCreate",
+    "type": "object"
+  },
+  "DecisionCreate": {
+    "additionalProperties": false,
+    "properties": {
+      "round_id": {
+        "format": "uuid",
+        "title": "Round Id",
+        "type": "string"
+      },
+      "expected_input_revision": {
+        "exclusiveMinimum": 0,
+        "title": "Expected Input Revision",
+        "type": "integer"
+      },
+      "rationale": {
+        "maxLength": 2000,
+        "minLength": 1,
+        "pattern": "\\S",
+        "title": "Rationale",
+        "type": "string"
+      }
+    },
+    "required": [
+      "round_id",
+      "expected_input_revision",
+      "rationale"
+    ],
+    "title": "DecisionCreate",
+    "type": "object"
+  },
+  "TicketDraftContent": {
+    "additionalProperties": false,
+    "properties": {
+      "title": {
+        "maxLength": 200,
+        "minLength": 1,
+        "pattern": "\\S",
+        "title": "Title",
+        "type": "string"
+      },
+      "description": {
+        "maxLength": 20000,
+        "minLength": 1,
+        "pattern": "\\S",
+        "title": "Description",
+        "type": "string"
+      },
+      "acceptance_criteria": {
+        "items": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "pattern": "\\S",
+          "type": "string"
+        },
+        "maxItems": 30,
+        "minItems": 1,
+        "title": "Acceptance Criteria",
+        "type": "array"
+      },
+      "proposal_feature_ids": {
+        "items": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "maxItems": 30,
+        "title": "Proposal Feature Ids",
+        "type": "array"
+      }
+    },
+    "required": [
+      "title",
+      "description",
+      "acceptance_criteria",
+      "proposal_feature_ids"
+    ],
+    "title": "TicketDraftContent",
+    "type": "object"
+  },
+  "TicketPublish": {
+    "additionalProperties": false,
+    "properties": {
+      "decision_id": {
+        "format": "uuid",
+        "title": "Decision Id",
+        "type": "string"
+      },
+      "ticket_draft_revision_ids": {
+        "items": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "maxItems": 30,
+        "minItems": 1,
+        "title": "Ticket Draft Revision Ids",
+        "type": "array"
+      },
+      "repository_owner": {
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9-]{0,38}$",
+        "title": "Repository Owner",
+        "type": "string"
+      },
+      "repository_name": {
+        "pattern": "^[A-Za-z0-9_.-]{1,100}$",
+        "title": "Repository Name",
+        "type": "string"
+      },
+      "request_key": {
+        "format": "uuid",
+        "title": "Request Key",
+        "type": "string"
+      },
+      "payload_hash": {
+        "pattern": "^[0-9a-f]{64}$",
+        "title": "Payload Hash",
+        "type": "string"
+      }
+    },
+    "required": [
+      "decision_id",
+      "ticket_draft_revision_ids",
+      "repository_owner",
+      "repository_name",
+      "request_key",
+      "payload_hash"
+    ],
+    "title": "TicketPublish",
+    "type": "object"
+  },
+  "SnapshotContract": {
+    "additionalProperties": false,
+    "properties": {
+      "input_revision": {
+        "exclusiveMinimum": 0,
+        "title": "Input Revision",
+        "type": "integer"
+      },
+      "policy_version_id": {
+        "format": "uuid",
+        "title": "Policy Version Id",
+        "type": "string"
+      },
+      "constraint_set_id": {
+        "format": "uuid",
+        "title": "Constraint Set Id",
+        "type": "string"
+      },
+      "idea_version_ids": {
+        "items": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "maxItems": 200,
+        "title": "Idea Version Ids",
+        "type": "array"
+      },
+      "annotation_version_ids": {
+        "items": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "maxItems": 1000,
+        "title": "Annotation Version Ids",
+        "type": "array"
+      },
+      "preference_revision_ids": {
+        "items": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "maxItems": 1000,
+        "title": "Preference Revision Ids",
+        "type": "array"
+      },
+      "goal": {
+        "maxLength": 2000,
+        "minLength": 1,
+        "pattern": "\\S",
+        "title": "Goal",
+        "type": "string"
+      }
+    },
+    "required": [
+      "input_revision",
+      "policy_version_id",
+      "constraint_set_id",
+      "idea_version_ids",
+      "annotation_version_ids",
+      "preference_revision_ids",
+      "goal"
+    ],
+    "title": "SnapshotContract",
+    "type": "object"
+  },
+  "InterpretEnvelope": {
+    "$defs": {
+      "AnnotationEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "annotation",
+            "title": "Kind",
+            "type": "string"
+          },
+          "annotation_version_id": {
+            "format": "uuid",
+            "title": "Annotation Version Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "annotation_version_id"
+        ],
+        "title": "AnnotationEvidence",
+        "type": "object"
+      },
+      "ConstraintEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "constraint",
+            "title": "Kind",
+            "type": "string"
+          },
+          "constraint_revision_id": {
+            "format": "uuid",
+            "title": "Constraint Revision Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "constraint_revision_id"
+        ],
+        "title": "ConstraintEvidence",
+        "type": "object"
+      },
+      "IdeaEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "idea_span",
+            "title": "Kind",
+            "type": "string"
+          },
+          "idea_version_id": {
+            "format": "uuid",
+            "title": "Idea Version Id",
+            "type": "string"
+          },
+          "span": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/Span"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          }
+        },
+        "required": [
+          "kind",
+          "idea_version_id"
+        ],
+        "title": "IdeaEvidence",
+        "type": "object"
+      },
+      "InterpretOutput": {
+        "additionalProperties": false,
+        "properties": {
+          "preferences": {
+            "items": {
+              "$ref": "#/$defs/PreferenceSuggestion"
+            },
+            "maxItems": 200,
+            "title": "Preferences",
+            "type": "array"
+          }
+        },
+        "required": [
+          "preferences"
+        ],
+        "title": "InterpretOutput",
+        "type": "object"
+      },
+      "PreferenceEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "preference",
+            "title": "Kind",
+            "type": "string"
+          },
+          "preference_revision_id": {
+            "format": "uuid",
+            "title": "Preference Revision Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "preference_revision_id"
+        ],
+        "title": "PreferenceEvidence",
+        "type": "object"
+      },
+      "PreferenceSuggestion": {
+        "additionalProperties": false,
+        "properties": {
+          "participant_id": {
+            "format": "uuid",
+            "title": "Participant Id",
+            "type": "string"
+          },
+          "statement": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Statement",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "desire",
+              "concern",
+              "constraint",
+              "question",
+              "suggestion"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "evidence": {
+            "items": {
+              "discriminator": {
+                "mapping": {
+                  "annotation": "#/$defs/AnnotationEvidence",
+                  "constraint": "#/$defs/ConstraintEvidence",
+                  "idea_span": "#/$defs/IdeaEvidence",
+                  "preference": "#/$defs/PreferenceEvidence"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/IdeaEvidence"
+                },
+                {
+                  "$ref": "#/$defs/AnnotationEvidence"
+                },
+                {
+                  "$ref": "#/$defs/PreferenceEvidence"
+                },
+                {
+                  "$ref": "#/$defs/ConstraintEvidence"
+                }
+              ]
+            },
+            "maxItems": 100,
+            "minItems": 1,
+            "title": "Evidence",
+            "type": "array"
+          },
+          "uncertainty_note": {
+            "anyOf": [
+              {
+                "maxLength": 2000,
+                "minLength": 1,
+                "pattern": "\\S",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Uncertainty Note"
+          }
+        },
+        "required": [
+          "participant_id",
+          "statement",
+          "kind",
+          "evidence"
+        ],
+        "title": "PreferenceSuggestion",
+        "type": "object"
+      },
+      "Span": {
+        "additionalProperties": false,
+        "properties": {
+          "start_utf16": {
+            "minimum": 0,
+            "title": "Start Utf16",
+            "type": "integer"
+          },
+          "end_utf16": {
+            "exclusiveMinimum": 0,
+            "title": "End Utf16",
+            "type": "integer"
+          },
+          "quote": {
+            "maxLength": 20000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Quote",
+            "type": "string"
+          },
+          "prefix": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Prefix",
+            "type": "string"
+          },
+          "suffix": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Suffix",
+            "type": "string"
+          }
+        },
+        "required": [
+          "start_utf16",
+          "end_utf16",
+          "quote"
+        ],
+        "title": "Span",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "schema_version": {
+        "const": "1",
+        "title": "Schema Version",
+        "type": "string"
+      },
+      "run_id": {
+        "format": "uuid",
+        "title": "Run Id",
+        "type": "string"
+      },
+      "snapshot_id": {
+        "format": "uuid",
+        "title": "Snapshot Id",
+        "type": "string"
+      },
+      "stage": {
+        "const": "interpret",
+        "title": "Stage",
+        "type": "string"
+      },
+      "payload": {
+        "$ref": "#/$defs/InterpretOutput"
+      }
+    },
+    "required": [
+      "schema_version",
+      "run_id",
+      "snapshot_id",
+      "stage",
+      "payload"
+    ],
+    "title": "InterpretEnvelope",
+    "type": "object"
+  },
+  "AnalyzeEnvelope": {
+    "$defs": {
+      "AnalysisSuggestion": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "enum": [
+              "shared_priority",
+              "distinctive_interest",
+              "tension",
+              "question"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "statement": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Statement",
+            "type": "string"
+          },
+          "evidence": {
+            "items": {
+              "discriminator": {
+                "mapping": {
+                  "annotation": "#/$defs/AnnotationEvidence",
+                  "constraint": "#/$defs/ConstraintEvidence",
+                  "idea_span": "#/$defs/IdeaEvidence",
+                  "preference": "#/$defs/PreferenceEvidence"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/IdeaEvidence"
+                },
+                {
+                  "$ref": "#/$defs/AnnotationEvidence"
+                },
+                {
+                  "$ref": "#/$defs/PreferenceEvidence"
+                },
+                {
+                  "$ref": "#/$defs/ConstraintEvidence"
+                }
+              ]
+            },
+            "maxItems": 100,
+            "minItems": 1,
+            "title": "Evidence",
+            "type": "array"
+          },
+          "uncertainty_note": {
+            "anyOf": [
+              {
+                "maxLength": 2000,
+                "minLength": 1,
+                "pattern": "\\S",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Uncertainty Note"
+          }
+        },
+        "required": [
+          "kind",
+          "statement",
+          "evidence"
+        ],
+        "title": "AnalysisSuggestion",
+        "type": "object"
+      },
+      "AnalyzeOutput": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/$defs/AnalysisSuggestion"
+            },
+            "maxItems": 100,
+            "title": "Items",
+            "type": "array"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "title": "AnalyzeOutput",
+        "type": "object"
+      },
+      "AnnotationEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "annotation",
+            "title": "Kind",
+            "type": "string"
+          },
+          "annotation_version_id": {
+            "format": "uuid",
+            "title": "Annotation Version Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "annotation_version_id"
+        ],
+        "title": "AnnotationEvidence",
+        "type": "object"
+      },
+      "ConstraintEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "constraint",
+            "title": "Kind",
+            "type": "string"
+          },
+          "constraint_revision_id": {
+            "format": "uuid",
+            "title": "Constraint Revision Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "constraint_revision_id"
+        ],
+        "title": "ConstraintEvidence",
+        "type": "object"
+      },
+      "IdeaEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "idea_span",
+            "title": "Kind",
+            "type": "string"
+          },
+          "idea_version_id": {
+            "format": "uuid",
+            "title": "Idea Version Id",
+            "type": "string"
+          },
+          "span": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/Span"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          }
+        },
+        "required": [
+          "kind",
+          "idea_version_id"
+        ],
+        "title": "IdeaEvidence",
+        "type": "object"
+      },
+      "PreferenceEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "preference",
+            "title": "Kind",
+            "type": "string"
+          },
+          "preference_revision_id": {
+            "format": "uuid",
+            "title": "Preference Revision Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "preference_revision_id"
+        ],
+        "title": "PreferenceEvidence",
+        "type": "object"
+      },
+      "Span": {
+        "additionalProperties": false,
+        "properties": {
+          "start_utf16": {
+            "minimum": 0,
+            "title": "Start Utf16",
+            "type": "integer"
+          },
+          "end_utf16": {
+            "exclusiveMinimum": 0,
+            "title": "End Utf16",
+            "type": "integer"
+          },
+          "quote": {
+            "maxLength": 20000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Quote",
+            "type": "string"
+          },
+          "prefix": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Prefix",
+            "type": "string"
+          },
+          "suffix": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Suffix",
+            "type": "string"
+          }
+        },
+        "required": [
+          "start_utf16",
+          "end_utf16",
+          "quote"
+        ],
+        "title": "Span",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "schema_version": {
+        "const": "1",
+        "title": "Schema Version",
+        "type": "string"
+      },
+      "run_id": {
+        "format": "uuid",
+        "title": "Run Id",
+        "type": "string"
+      },
+      "snapshot_id": {
+        "format": "uuid",
+        "title": "Snapshot Id",
+        "type": "string"
+      },
+      "stage": {
+        "const": "analyze",
+        "title": "Stage",
+        "type": "string"
+      },
+      "payload": {
+        "$ref": "#/$defs/AnalyzeOutput"
+      }
+    },
+    "required": [
+      "schema_version",
+      "run_id",
+      "snapshot_id",
+      "stage",
+      "payload"
+    ],
+    "title": "AnalyzeEnvelope",
+    "type": "object"
+  },
+  "SynthesizeEnvelope": {
+    "$defs": {
+      "AnnotationEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "annotation",
+            "title": "Kind",
+            "type": "string"
+          },
+          "annotation_version_id": {
+            "format": "uuid",
+            "title": "Annotation Version Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "annotation_version_id"
+        ],
+        "title": "AnnotationEvidence",
+        "type": "object"
+      },
+      "CandidateDraft": {
+        "additionalProperties": false,
+        "properties": {
+          "title": {
+            "maxLength": 200,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Title",
+            "type": "string"
+          },
+          "summary": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Summary",
+            "type": "string"
+          },
+          "scope": {
+            "maxLength": 20000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Scope",
+            "type": "string"
+          },
+          "assumptions": {
+            "items": {
+              "maxLength": 2000,
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            "maxItems": 30,
+            "title": "Assumptions",
+            "type": "array"
+          },
+          "exclusions": {
+            "items": {
+              "maxLength": 2000,
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            "maxItems": 30,
+            "title": "Exclusions",
+            "type": "array"
+          },
+          "unresolved_concerns": {
+            "items": {
+              "maxLength": 2000,
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            "maxItems": 100,
+            "title": "Unresolved Concerns",
+            "type": "array"
+          },
+          "features": {
+            "items": {
+              "$ref": "#/$defs/FeatureDraft"
+            },
+            "maxItems": 30,
+            "minItems": 1,
+            "title": "Features",
+            "type": "array"
+          }
+        },
+        "required": [
+          "title",
+          "summary",
+          "scope",
+          "assumptions",
+          "exclusions",
+          "unresolved_concerns",
+          "features"
+        ],
+        "title": "CandidateDraft",
+        "type": "object"
+      },
+      "ConstraintEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "constraint",
+            "title": "Kind",
+            "type": "string"
+          },
+          "constraint_revision_id": {
+            "format": "uuid",
+            "title": "Constraint Revision Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "constraint_revision_id"
+        ],
+        "title": "ConstraintEvidence",
+        "type": "object"
+      },
+      "FeatureDraft": {
+        "additionalProperties": false,
+        "properties": {
+          "text": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Text",
+            "type": "string"
+          },
+          "origin": {
+            "enum": [
+              "human_source",
+              "combination",
+              "ai_suggestion"
+            ],
+            "title": "Origin",
+            "type": "string"
+          },
+          "evidence": {
+            "items": {
+              "discriminator": {
+                "mapping": {
+                  "annotation": "#/$defs/AnnotationEvidence",
+                  "constraint": "#/$defs/ConstraintEvidence",
+                  "idea_span": "#/$defs/IdeaEvidence",
+                  "preference": "#/$defs/PreferenceEvidence"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/IdeaEvidence"
+                },
+                {
+                  "$ref": "#/$defs/AnnotationEvidence"
+                },
+                {
+                  "$ref": "#/$defs/PreferenceEvidence"
+                },
+                {
+                  "$ref": "#/$defs/ConstraintEvidence"
+                }
+              ]
+            },
+            "maxItems": 100,
+            "title": "Evidence",
+            "type": "array"
+          },
+          "rationale": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Rationale",
+            "type": "string"
+          }
+        },
+        "required": [
+          "text",
+          "origin",
+          "rationale"
+        ],
+        "title": "FeatureDraft",
+        "type": "object"
+      },
+      "IdeaEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "idea_span",
+            "title": "Kind",
+            "type": "string"
+          },
+          "idea_version_id": {
+            "format": "uuid",
+            "title": "Idea Version Id",
+            "type": "string"
+          },
+          "span": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/Span"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          }
+        },
+        "required": [
+          "kind",
+          "idea_version_id"
+        ],
+        "title": "IdeaEvidence",
+        "type": "object"
+      },
+      "PreferenceEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "preference",
+            "title": "Kind",
+            "type": "string"
+          },
+          "preference_revision_id": {
+            "format": "uuid",
+            "title": "Preference Revision Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "preference_revision_id"
+        ],
+        "title": "PreferenceEvidence",
+        "type": "object"
+      },
+      "Span": {
+        "additionalProperties": false,
+        "properties": {
+          "start_utf16": {
+            "minimum": 0,
+            "title": "Start Utf16",
+            "type": "integer"
+          },
+          "end_utf16": {
+            "exclusiveMinimum": 0,
+            "title": "End Utf16",
+            "type": "integer"
+          },
+          "quote": {
+            "maxLength": 20000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Quote",
+            "type": "string"
+          },
+          "prefix": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Prefix",
+            "type": "string"
+          },
+          "suffix": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Suffix",
+            "type": "string"
+          }
+        },
+        "required": [
+          "start_utf16",
+          "end_utf16",
+          "quote"
+        ],
+        "title": "Span",
+        "type": "object"
+      },
+      "SynthesizeOutput": {
+        "additionalProperties": false,
+        "properties": {
+          "candidates": {
+            "items": {
+              "$ref": "#/$defs/CandidateDraft"
+            },
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Candidates",
+            "type": "array"
+          }
+        },
+        "required": [
+          "candidates"
+        ],
+        "title": "SynthesizeOutput",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "schema_version": {
+        "const": "1",
+        "title": "Schema Version",
+        "type": "string"
+      },
+      "run_id": {
+        "format": "uuid",
+        "title": "Run Id",
+        "type": "string"
+      },
+      "snapshot_id": {
+        "format": "uuid",
+        "title": "Snapshot Id",
+        "type": "string"
+      },
+      "stage": {
+        "const": "synthesize",
+        "title": "Stage",
+        "type": "string"
+      },
+      "payload": {
+        "$ref": "#/$defs/SynthesizeOutput"
+      }
+    },
+    "required": [
+      "schema_version",
+      "run_id",
+      "snapshot_id",
+      "stage",
+      "payload"
+    ],
+    "title": "SynthesizeEnvelope",
+    "type": "object"
+  },
+  "CritiqueEnvelope": {
+    "$defs": {
+      "AnnotationEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "annotation",
+            "title": "Kind",
+            "type": "string"
+          },
+          "annotation_version_id": {
+            "format": "uuid",
+            "title": "Annotation Version Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "annotation_version_id"
+        ],
+        "title": "AnnotationEvidence",
+        "type": "object"
+      },
+      "AttributionFinding": {
+        "additionalProperties": false,
+        "properties": {
+          "feature_index": {
+            "exclusiveMaximum": 30,
+            "minimum": 0,
+            "title": "Feature Index",
+            "type": "integer"
+          },
+          "candidate_index": {
+            "enum": [
+              0,
+              1
+            ],
+            "title": "Candidate Index",
+            "type": "integer"
+          },
+          "explanation": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Explanation",
+            "type": "string"
+          },
+          "evidence": {
+            "items": {
+              "discriminator": {
+                "mapping": {
+                  "annotation": "#/$defs/AnnotationEvidence",
+                  "constraint": "#/$defs/ConstraintEvidence",
+                  "idea_span": "#/$defs/IdeaEvidence",
+                  "preference": "#/$defs/PreferenceEvidence"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/IdeaEvidence"
+                },
+                {
+                  "$ref": "#/$defs/AnnotationEvidence"
+                },
+                {
+                  "$ref": "#/$defs/PreferenceEvidence"
+                },
+                {
+                  "$ref": "#/$defs/ConstraintEvidence"
+                }
+              ]
+            },
+            "maxItems": 100,
+            "title": "Evidence",
+            "type": "array"
+          }
+        },
+        "required": [
+          "feature_index",
+          "candidate_index",
+          "explanation",
+          "evidence"
+        ],
+        "title": "AttributionFinding",
+        "type": "object"
+      },
+      "ConstraintCheck": {
+        "additionalProperties": false,
+        "properties": {
+          "constraint_revision_id": {
+            "format": "uuid",
+            "title": "Constraint Revision Id",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "verified",
+              "estimated",
+              "violated",
+              "unknown"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "method": {
+            "enum": [
+              "deterministic",
+              "model",
+              "human"
+            ],
+            "title": "Method",
+            "type": "string"
+          },
+          "evidence": {
+            "items": {
+              "discriminator": {
+                "mapping": {
+                  "annotation": "#/$defs/AnnotationEvidence",
+                  "constraint": "#/$defs/ConstraintEvidence",
+                  "idea_span": "#/$defs/IdeaEvidence",
+                  "preference": "#/$defs/PreferenceEvidence"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/IdeaEvidence"
+                },
+                {
+                  "$ref": "#/$defs/AnnotationEvidence"
+                },
+                {
+                  "$ref": "#/$defs/PreferenceEvidence"
+                },
+                {
+                  "$ref": "#/$defs/ConstraintEvidence"
+                }
+              ]
+            },
+            "maxItems": 100,
+            "title": "Evidence",
+            "type": "array"
+          },
+          "rationale": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Rationale",
+            "type": "string"
+          }
+        },
+        "required": [
+          "constraint_revision_id",
+          "status",
+          "method",
+          "evidence",
+          "rationale"
+        ],
+        "title": "ConstraintCheck",
+        "type": "object"
+      },
+      "ConstraintEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "constraint",
+            "title": "Kind",
+            "type": "string"
+          },
+          "constraint_revision_id": {
+            "format": "uuid",
+            "title": "Constraint Revision Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "constraint_revision_id"
+        ],
+        "title": "ConstraintEvidence",
+        "type": "object"
+      },
+      "CritiqueOutput": {
+        "additionalProperties": false,
+        "properties": {
+          "constraint_checks": {
+            "items": {
+              "$ref": "#/$defs/ConstraintCheck"
+            },
+            "maxItems": 200,
+            "title": "Constraint Checks",
+            "type": "array"
+          },
+          "attribution_findings": {
+            "items": {
+              "$ref": "#/$defs/AttributionFinding"
+            },
+            "maxItems": 100,
+            "title": "Attribution Findings",
+            "type": "array"
+          },
+          "unresolved_concerns": {
+            "items": {
+              "maxLength": 2000,
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            "maxItems": 100,
+            "title": "Unresolved Concerns",
+            "type": "array"
+          },
+          "recommendation": {
+            "enum": [
+              "ready_for_human_review",
+              "revise",
+              "infeasible",
+              "needs_clarification"
+            ],
+            "title": "Recommendation",
+            "type": "string"
+          }
+        },
+        "required": [
+          "constraint_checks",
+          "attribution_findings",
+          "unresolved_concerns",
+          "recommendation"
+        ],
+        "title": "CritiqueOutput",
+        "type": "object"
+      },
+      "IdeaEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "idea_span",
+            "title": "Kind",
+            "type": "string"
+          },
+          "idea_version_id": {
+            "format": "uuid",
+            "title": "Idea Version Id",
+            "type": "string"
+          },
+          "span": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/Span"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          }
+        },
+        "required": [
+          "kind",
+          "idea_version_id"
+        ],
+        "title": "IdeaEvidence",
+        "type": "object"
+      },
+      "PreferenceEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "preference",
+            "title": "Kind",
+            "type": "string"
+          },
+          "preference_revision_id": {
+            "format": "uuid",
+            "title": "Preference Revision Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "preference_revision_id"
+        ],
+        "title": "PreferenceEvidence",
+        "type": "object"
+      },
+      "Span": {
+        "additionalProperties": false,
+        "properties": {
+          "start_utf16": {
+            "minimum": 0,
+            "title": "Start Utf16",
+            "type": "integer"
+          },
+          "end_utf16": {
+            "exclusiveMinimum": 0,
+            "title": "End Utf16",
+            "type": "integer"
+          },
+          "quote": {
+            "maxLength": 20000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Quote",
+            "type": "string"
+          },
+          "prefix": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Prefix",
+            "type": "string"
+          },
+          "suffix": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Suffix",
+            "type": "string"
+          }
+        },
+        "required": [
+          "start_utf16",
+          "end_utf16",
+          "quote"
+        ],
+        "title": "Span",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "schema_version": {
+        "const": "1",
+        "title": "Schema Version",
+        "type": "string"
+      },
+      "run_id": {
+        "format": "uuid",
+        "title": "Run Id",
+        "type": "string"
+      },
+      "snapshot_id": {
+        "format": "uuid",
+        "title": "Snapshot Id",
+        "type": "string"
+      },
+      "stage": {
+        "const": "critique",
+        "title": "Stage",
+        "type": "string"
+      },
+      "payload": {
+        "$ref": "#/$defs/CritiqueOutput"
+      }
+    },
+    "required": [
+      "schema_version",
+      "run_id",
+      "snapshot_id",
+      "stage",
+      "payload"
+    ],
+    "title": "CritiqueEnvelope",
+    "type": "object"
+  },
+  "WorkflowEnvelope": {
+    "$defs": {
+      "AnalysisSuggestion": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "enum": [
+              "shared_priority",
+              "distinctive_interest",
+              "tension",
+              "question"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "statement": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Statement",
+            "type": "string"
+          },
+          "evidence": {
+            "items": {
+              "discriminator": {
+                "mapping": {
+                  "annotation": "#/$defs/AnnotationEvidence",
+                  "constraint": "#/$defs/ConstraintEvidence",
+                  "idea_span": "#/$defs/IdeaEvidence",
+                  "preference": "#/$defs/PreferenceEvidence"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/IdeaEvidence"
+                },
+                {
+                  "$ref": "#/$defs/AnnotationEvidence"
+                },
+                {
+                  "$ref": "#/$defs/PreferenceEvidence"
+                },
+                {
+                  "$ref": "#/$defs/ConstraintEvidence"
+                }
+              ]
+            },
+            "maxItems": 100,
+            "minItems": 1,
+            "title": "Evidence",
+            "type": "array"
+          },
+          "uncertainty_note": {
+            "anyOf": [
+              {
+                "maxLength": 2000,
+                "minLength": 1,
+                "pattern": "\\S",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Uncertainty Note"
+          }
+        },
+        "required": [
+          "kind",
+          "statement",
+          "evidence"
+        ],
+        "title": "AnalysisSuggestion",
+        "type": "object"
+      },
+      "AnalyzeEnvelope": {
+        "additionalProperties": false,
+        "properties": {
+          "schema_version": {
+            "const": "1",
+            "title": "Schema Version",
+            "type": "string"
+          },
+          "run_id": {
+            "format": "uuid",
+            "title": "Run Id",
+            "type": "string"
+          },
+          "snapshot_id": {
+            "format": "uuid",
+            "title": "Snapshot Id",
+            "type": "string"
+          },
+          "stage": {
+            "const": "analyze",
+            "title": "Stage",
+            "type": "string"
+          },
+          "payload": {
+            "$ref": "#/$defs/AnalyzeOutput"
+          }
+        },
+        "required": [
+          "schema_version",
+          "run_id",
+          "snapshot_id",
+          "stage",
+          "payload"
+        ],
+        "title": "AnalyzeEnvelope",
+        "type": "object"
+      },
+      "AnalyzeOutput": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/$defs/AnalysisSuggestion"
+            },
+            "maxItems": 100,
+            "title": "Items",
+            "type": "array"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "title": "AnalyzeOutput",
+        "type": "object"
+      },
+      "AnnotationEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "annotation",
+            "title": "Kind",
+            "type": "string"
+          },
+          "annotation_version_id": {
+            "format": "uuid",
+            "title": "Annotation Version Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "annotation_version_id"
+        ],
+        "title": "AnnotationEvidence",
+        "type": "object"
+      },
+      "AttributionFinding": {
+        "additionalProperties": false,
+        "properties": {
+          "feature_index": {
+            "exclusiveMaximum": 30,
+            "minimum": 0,
+            "title": "Feature Index",
+            "type": "integer"
+          },
+          "candidate_index": {
+            "enum": [
+              0,
+              1
+            ],
+            "title": "Candidate Index",
+            "type": "integer"
+          },
+          "explanation": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Explanation",
+            "type": "string"
+          },
+          "evidence": {
+            "items": {
+              "discriminator": {
+                "mapping": {
+                  "annotation": "#/$defs/AnnotationEvidence",
+                  "constraint": "#/$defs/ConstraintEvidence",
+                  "idea_span": "#/$defs/IdeaEvidence",
+                  "preference": "#/$defs/PreferenceEvidence"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/IdeaEvidence"
+                },
+                {
+                  "$ref": "#/$defs/AnnotationEvidence"
+                },
+                {
+                  "$ref": "#/$defs/PreferenceEvidence"
+                },
+                {
+                  "$ref": "#/$defs/ConstraintEvidence"
+                }
+              ]
+            },
+            "maxItems": 100,
+            "title": "Evidence",
+            "type": "array"
+          }
+        },
+        "required": [
+          "feature_index",
+          "candidate_index",
+          "explanation",
+          "evidence"
+        ],
+        "title": "AttributionFinding",
+        "type": "object"
+      },
+      "CandidateDraft": {
+        "additionalProperties": false,
+        "properties": {
+          "title": {
+            "maxLength": 200,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Title",
+            "type": "string"
+          },
+          "summary": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Summary",
+            "type": "string"
+          },
+          "scope": {
+            "maxLength": 20000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Scope",
+            "type": "string"
+          },
+          "assumptions": {
+            "items": {
+              "maxLength": 2000,
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            "maxItems": 30,
+            "title": "Assumptions",
+            "type": "array"
+          },
+          "exclusions": {
+            "items": {
+              "maxLength": 2000,
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            "maxItems": 30,
+            "title": "Exclusions",
+            "type": "array"
+          },
+          "unresolved_concerns": {
+            "items": {
+              "maxLength": 2000,
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            "maxItems": 100,
+            "title": "Unresolved Concerns",
+            "type": "array"
+          },
+          "features": {
+            "items": {
+              "$ref": "#/$defs/FeatureDraft"
+            },
+            "maxItems": 30,
+            "minItems": 1,
+            "title": "Features",
+            "type": "array"
+          }
+        },
+        "required": [
+          "title",
+          "summary",
+          "scope",
+          "assumptions",
+          "exclusions",
+          "unresolved_concerns",
+          "features"
+        ],
+        "title": "CandidateDraft",
+        "type": "object"
+      },
+      "ConstraintCheck": {
+        "additionalProperties": false,
+        "properties": {
+          "constraint_revision_id": {
+            "format": "uuid",
+            "title": "Constraint Revision Id",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "verified",
+              "estimated",
+              "violated",
+              "unknown"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "method": {
+            "enum": [
+              "deterministic",
+              "model",
+              "human"
+            ],
+            "title": "Method",
+            "type": "string"
+          },
+          "evidence": {
+            "items": {
+              "discriminator": {
+                "mapping": {
+                  "annotation": "#/$defs/AnnotationEvidence",
+                  "constraint": "#/$defs/ConstraintEvidence",
+                  "idea_span": "#/$defs/IdeaEvidence",
+                  "preference": "#/$defs/PreferenceEvidence"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/IdeaEvidence"
+                },
+                {
+                  "$ref": "#/$defs/AnnotationEvidence"
+                },
+                {
+                  "$ref": "#/$defs/PreferenceEvidence"
+                },
+                {
+                  "$ref": "#/$defs/ConstraintEvidence"
+                }
+              ]
+            },
+            "maxItems": 100,
+            "title": "Evidence",
+            "type": "array"
+          },
+          "rationale": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Rationale",
+            "type": "string"
+          }
+        },
+        "required": [
+          "constraint_revision_id",
+          "status",
+          "method",
+          "evidence",
+          "rationale"
+        ],
+        "title": "ConstraintCheck",
+        "type": "object"
+      },
+      "ConstraintEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "constraint",
+            "title": "Kind",
+            "type": "string"
+          },
+          "constraint_revision_id": {
+            "format": "uuid",
+            "title": "Constraint Revision Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "constraint_revision_id"
+        ],
+        "title": "ConstraintEvidence",
+        "type": "object"
+      },
+      "CritiqueEnvelope": {
+        "additionalProperties": false,
+        "properties": {
+          "schema_version": {
+            "const": "1",
+            "title": "Schema Version",
+            "type": "string"
+          },
+          "run_id": {
+            "format": "uuid",
+            "title": "Run Id",
+            "type": "string"
+          },
+          "snapshot_id": {
+            "format": "uuid",
+            "title": "Snapshot Id",
+            "type": "string"
+          },
+          "stage": {
+            "const": "critique",
+            "title": "Stage",
+            "type": "string"
+          },
+          "payload": {
+            "$ref": "#/$defs/CritiqueOutput"
+          }
+        },
+        "required": [
+          "schema_version",
+          "run_id",
+          "snapshot_id",
+          "stage",
+          "payload"
+        ],
+        "title": "CritiqueEnvelope",
+        "type": "object"
+      },
+      "CritiqueOutput": {
+        "additionalProperties": false,
+        "properties": {
+          "constraint_checks": {
+            "items": {
+              "$ref": "#/$defs/ConstraintCheck"
+            },
+            "maxItems": 200,
+            "title": "Constraint Checks",
+            "type": "array"
+          },
+          "attribution_findings": {
+            "items": {
+              "$ref": "#/$defs/AttributionFinding"
+            },
+            "maxItems": 100,
+            "title": "Attribution Findings",
+            "type": "array"
+          },
+          "unresolved_concerns": {
+            "items": {
+              "maxLength": 2000,
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            "maxItems": 100,
+            "title": "Unresolved Concerns",
+            "type": "array"
+          },
+          "recommendation": {
+            "enum": [
+              "ready_for_human_review",
+              "revise",
+              "infeasible",
+              "needs_clarification"
+            ],
+            "title": "Recommendation",
+            "type": "string"
+          }
+        },
+        "required": [
+          "constraint_checks",
+          "attribution_findings",
+          "unresolved_concerns",
+          "recommendation"
+        ],
+        "title": "CritiqueOutput",
+        "type": "object"
+      },
+      "FeatureDraft": {
+        "additionalProperties": false,
+        "properties": {
+          "text": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Text",
+            "type": "string"
+          },
+          "origin": {
+            "enum": [
+              "human_source",
+              "combination",
+              "ai_suggestion"
+            ],
+            "title": "Origin",
+            "type": "string"
+          },
+          "evidence": {
+            "items": {
+              "discriminator": {
+                "mapping": {
+                  "annotation": "#/$defs/AnnotationEvidence",
+                  "constraint": "#/$defs/ConstraintEvidence",
+                  "idea_span": "#/$defs/IdeaEvidence",
+                  "preference": "#/$defs/PreferenceEvidence"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/IdeaEvidence"
+                },
+                {
+                  "$ref": "#/$defs/AnnotationEvidence"
+                },
+                {
+                  "$ref": "#/$defs/PreferenceEvidence"
+                },
+                {
+                  "$ref": "#/$defs/ConstraintEvidence"
+                }
+              ]
+            },
+            "maxItems": 100,
+            "title": "Evidence",
+            "type": "array"
+          },
+          "rationale": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Rationale",
+            "type": "string"
+          }
+        },
+        "required": [
+          "text",
+          "origin",
+          "rationale"
+        ],
+        "title": "FeatureDraft",
+        "type": "object"
+      },
+      "IdeaEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "idea_span",
+            "title": "Kind",
+            "type": "string"
+          },
+          "idea_version_id": {
+            "format": "uuid",
+            "title": "Idea Version Id",
+            "type": "string"
+          },
+          "span": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/Span"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          }
+        },
+        "required": [
+          "kind",
+          "idea_version_id"
+        ],
+        "title": "IdeaEvidence",
+        "type": "object"
+      },
+      "InterpretEnvelope": {
+        "additionalProperties": false,
+        "properties": {
+          "schema_version": {
+            "const": "1",
+            "title": "Schema Version",
+            "type": "string"
+          },
+          "run_id": {
+            "format": "uuid",
+            "title": "Run Id",
+            "type": "string"
+          },
+          "snapshot_id": {
+            "format": "uuid",
+            "title": "Snapshot Id",
+            "type": "string"
+          },
+          "stage": {
+            "const": "interpret",
+            "title": "Stage",
+            "type": "string"
+          },
+          "payload": {
+            "$ref": "#/$defs/InterpretOutput"
+          }
+        },
+        "required": [
+          "schema_version",
+          "run_id",
+          "snapshot_id",
+          "stage",
+          "payload"
+        ],
+        "title": "InterpretEnvelope",
+        "type": "object"
+      },
+      "InterpretOutput": {
+        "additionalProperties": false,
+        "properties": {
+          "preferences": {
+            "items": {
+              "$ref": "#/$defs/PreferenceSuggestion"
+            },
+            "maxItems": 200,
+            "title": "Preferences",
+            "type": "array"
+          }
+        },
+        "required": [
+          "preferences"
+        ],
+        "title": "InterpretOutput",
+        "type": "object"
+      },
+      "PreferenceEvidence": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "preference",
+            "title": "Kind",
+            "type": "string"
+          },
+          "preference_revision_id": {
+            "format": "uuid",
+            "title": "Preference Revision Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "preference_revision_id"
+        ],
+        "title": "PreferenceEvidence",
+        "type": "object"
+      },
+      "PreferenceSuggestion": {
+        "additionalProperties": false,
+        "properties": {
+          "participant_id": {
+            "format": "uuid",
+            "title": "Participant Id",
+            "type": "string"
+          },
+          "statement": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Statement",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "desire",
+              "concern",
+              "constraint",
+              "question",
+              "suggestion"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "evidence": {
+            "items": {
+              "discriminator": {
+                "mapping": {
+                  "annotation": "#/$defs/AnnotationEvidence",
+                  "constraint": "#/$defs/ConstraintEvidence",
+                  "idea_span": "#/$defs/IdeaEvidence",
+                  "preference": "#/$defs/PreferenceEvidence"
+                },
+                "propertyName": "kind"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/IdeaEvidence"
+                },
+                {
+                  "$ref": "#/$defs/AnnotationEvidence"
+                },
+                {
+                  "$ref": "#/$defs/PreferenceEvidence"
+                },
+                {
+                  "$ref": "#/$defs/ConstraintEvidence"
+                }
+              ]
+            },
+            "maxItems": 100,
+            "minItems": 1,
+            "title": "Evidence",
+            "type": "array"
+          },
+          "uncertainty_note": {
+            "anyOf": [
+              {
+                "maxLength": 2000,
+                "minLength": 1,
+                "pattern": "\\S",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Uncertainty Note"
+          }
+        },
+        "required": [
+          "participant_id",
+          "statement",
+          "kind",
+          "evidence"
+        ],
+        "title": "PreferenceSuggestion",
+        "type": "object"
+      },
+      "Span": {
+        "additionalProperties": false,
+        "properties": {
+          "start_utf16": {
+            "minimum": 0,
+            "title": "Start Utf16",
+            "type": "integer"
+          },
+          "end_utf16": {
+            "exclusiveMinimum": 0,
+            "title": "End Utf16",
+            "type": "integer"
+          },
+          "quote": {
+            "maxLength": 20000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Quote",
+            "type": "string"
+          },
+          "prefix": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Prefix",
+            "type": "string"
+          },
+          "suffix": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Suffix",
+            "type": "string"
+          }
+        },
+        "required": [
+          "start_utf16",
+          "end_utf16",
+          "quote"
+        ],
+        "title": "Span",
+        "type": "object"
+      },
+      "SynthesizeEnvelope": {
+        "additionalProperties": false,
+        "properties": {
+          "schema_version": {
+            "const": "1",
+            "title": "Schema Version",
+            "type": "string"
+          },
+          "run_id": {
+            "format": "uuid",
+            "title": "Run Id",
+            "type": "string"
+          },
+          "snapshot_id": {
+            "format": "uuid",
+            "title": "Snapshot Id",
+            "type": "string"
+          },
+          "stage": {
+            "const": "synthesize",
+            "title": "Stage",
+            "type": "string"
+          },
+          "payload": {
+            "$ref": "#/$defs/SynthesizeOutput"
+          }
+        },
+        "required": [
+          "schema_version",
+          "run_id",
+          "snapshot_id",
+          "stage",
+          "payload"
+        ],
+        "title": "SynthesizeEnvelope",
+        "type": "object"
+      },
+      "SynthesizeOutput": {
+        "additionalProperties": false,
+        "properties": {
+          "candidates": {
+            "items": {
+              "$ref": "#/$defs/CandidateDraft"
+            },
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Candidates",
+            "type": "array"
+          }
+        },
+        "required": [
+          "candidates"
+        ],
+        "title": "SynthesizeOutput",
+        "type": "object"
+      }
+    },
+    "discriminator": {
+      "mapping": {
+        "analyze": "#/$defs/AnalyzeEnvelope",
+        "critique": "#/$defs/CritiqueEnvelope",
+        "interpret": "#/$defs/InterpretEnvelope",
+        "synthesize": "#/$defs/SynthesizeEnvelope"
+      },
+      "propertyName": "stage"
+    },
+    "oneOf": [
+      {
+        "$ref": "#/$defs/InterpretEnvelope"
+      },
+      {
+        "$ref": "#/$defs/AnalyzeEnvelope"
+      },
+      {
+        "$ref": "#/$defs/SynthesizeEnvelope"
+      },
+      {
+        "$ref": "#/$defs/CritiqueEnvelope"
+      }
+    ]
+  },
+  "LoginRequest": {
+    "additionalProperties": false,
+    "properties": {
+      "login_name": {
+        "maxLength": 120,
+        "minLength": 1,
+        "pattern": "^[a-z0-9_.-]+$",
+        "title": "Login Name",
+        "type": "string"
+      },
+      "password": {
+        "format": "password",
+        "maxLength": 256,
+        "minLength": 12,
+        "title": "Password",
+        "type": "string",
+        "writeOnly": true
+      }
+    },
+    "required": [
+      "login_name",
+      "password"
+    ],
+    "title": "LoginRequest",
+    "type": "object"
+  },
+  "UserView": {
+    "additionalProperties": false,
+    "properties": {
+      "id": {
+        "format": "uuid",
+        "title": "Id",
+        "type": "string"
+      },
+      "display_name": {
+        "title": "Display Name",
+        "type": "string"
+      },
+      "login_name": {
+        "title": "Login Name",
+        "type": "string"
+      }
+    },
+    "required": [
+      "id",
+      "display_name",
+      "login_name"
+    ],
+    "title": "UserView",
+    "type": "object"
+  },
+  "AuthView": {
+    "$defs": {
+      "UserView": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "display_name": {
+            "title": "Display Name",
+            "type": "string"
+          },
+          "login_name": {
+            "title": "Login Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "display_name",
+          "login_name"
+        ],
+        "title": "UserView",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "user": {
+        "$ref": "#/$defs/UserView"
+      },
+      "csrf_token": {
+        "title": "Csrf Token",
+        "type": "string"
+      }
+    },
+    "required": [
+      "user",
+      "csrf_token"
+    ],
+    "title": "AuthView",
+    "type": "object"
+  },
+  "MemberView": {
+    "$defs": {
+      "UserView": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "display_name": {
+            "title": "Display Name",
+            "type": "string"
+          },
+          "login_name": {
+            "title": "Login Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "display_name",
+          "login_name"
+        ],
+        "title": "UserView",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "user": {
+        "$ref": "#/$defs/UserView"
+      },
+      "role": {
+        "enum": [
+          "owner",
+          "participant"
+        ],
+        "title": "Role",
+        "type": "string"
+      }
+    },
+    "required": [
+      "user",
+      "role"
+    ],
+    "title": "MemberView",
+    "type": "object"
+  },
+  "WorkspaceView": {
+    "$defs": {
+      "MemberView": {
+        "additionalProperties": false,
+        "properties": {
+          "user": {
+            "$ref": "#/$defs/UserView"
+          },
+          "role": {
+            "enum": [
+              "owner",
+              "participant"
+            ],
+            "title": "Role",
+            "type": "string"
+          }
+        },
+        "required": [
+          "user",
+          "role"
+        ],
+        "title": "MemberView",
+        "type": "object"
+      },
+      "UserView": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "display_name": {
+            "title": "Display Name",
+            "type": "string"
+          },
+          "login_name": {
+            "title": "Login Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "display_name",
+          "login_name"
+        ],
+        "title": "UserView",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "id": {
+        "format": "uuid",
+        "title": "Id",
+        "type": "string"
+      },
+      "title": {
+        "title": "Title",
+        "type": "string"
+      },
+      "goal": {
+        "title": "Goal",
+        "type": "string"
+      },
+      "input_revision": {
+        "title": "Input Revision",
+        "type": "integer"
+      },
+      "members": {
+        "items": {
+          "$ref": "#/$defs/MemberView"
+        },
+        "title": "Members",
+        "type": "array"
+      }
+    },
+    "required": [
+      "id",
+      "title",
+      "goal",
+      "input_revision",
+      "members"
+    ],
+    "title": "WorkspaceView",
+    "type": "object"
+  },
+  "IdeaView": {
+    "$defs": {
+      "UserView": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "display_name": {
+            "title": "Display Name",
+            "type": "string"
+          },
+          "login_name": {
+            "title": "Login Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "display_name",
+          "login_name"
+        ],
+        "title": "UserView",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "id": {
+        "format": "uuid",
+        "title": "Id",
+        "type": "string"
+      },
+      "workspace_id": {
+        "format": "uuid",
+        "title": "Workspace Id",
+        "type": "string"
+      },
+      "version_id": {
+        "format": "uuid",
+        "title": "Version Id",
+        "type": "string"
+      },
+      "version": {
+        "title": "Version",
+        "type": "integer"
+      },
+      "title": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Title"
+      },
+      "body": {
+        "title": "Body",
+        "type": "string"
+      },
+      "author": {
+        "$ref": "#/$defs/UserView"
+      },
+      "created_at": {
+        "format": "date-time",
+        "title": "Created At",
+        "type": "string"
+      },
+      "updated_at": {
+        "format": "date-time",
+        "title": "Updated At",
+        "type": "string"
+      }
+    },
+    "required": [
+      "id",
+      "workspace_id",
+      "version_id",
+      "version",
+      "title",
+      "body",
+      "author",
+      "created_at",
+      "updated_at"
+    ],
+    "title": "IdeaView",
+    "type": "object"
+  },
+  "IdeaHistoryView": {
+    "additionalProperties": false,
+    "properties": {
+      "version_id": {
+        "format": "uuid",
+        "title": "Version Id",
+        "type": "string"
+      },
+      "version": {
+        "title": "Version",
+        "type": "integer"
+      },
+      "title": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Title"
+      },
+      "body": {
+        "title": "Body",
+        "type": "string"
+      },
+      "created_at": {
+        "format": "date-time",
+        "title": "Created At",
+        "type": "string"
+      }
+    },
+    "required": [
+      "version_id",
+      "version",
+      "title",
+      "body",
+      "created_at"
+    ],
+    "title": "IdeaHistoryView",
+    "type": "object"
+  },
+  "PilotMember": {
+    "additionalProperties": false,
+    "properties": {
+      "login_name": {
+        "maxLength": 120,
+        "minLength": 1,
+        "pattern": "^[a-z0-9_.-]+$",
+        "title": "Login Name",
+        "type": "string"
+      },
+      "display_name": {
+        "maxLength": 120,
+        "minLength": 1,
+        "pattern": "\\S",
+        "title": "Display Name",
+        "type": "string"
+      },
+      "password": {
+        "format": "password",
+        "maxLength": 256,
+        "minLength": 12,
+        "title": "Password",
+        "type": "string",
+        "writeOnly": true
+      }
+    },
+    "required": [
+      "login_name",
+      "display_name",
+      "password"
+    ],
+    "title": "PilotMember",
+    "type": "object"
+  },
+  "PilotSetup": {
+    "$defs": {
+      "PilotMember": {
+        "additionalProperties": false,
+        "properties": {
+          "login_name": {
+            "maxLength": 120,
+            "minLength": 1,
+            "pattern": "^[a-z0-9_.-]+$",
+            "title": "Login Name",
+            "type": "string"
+          },
+          "display_name": {
+            "maxLength": 120,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Display Name",
+            "type": "string"
+          },
+          "password": {
+            "format": "password",
+            "maxLength": 256,
+            "minLength": 12,
+            "title": "Password",
+            "type": "string",
+            "writeOnly": true
+          }
+        },
+        "required": [
+          "login_name",
+          "display_name",
+          "password"
+        ],
+        "title": "PilotMember",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "title": {
+        "maxLength": 200,
+        "minLength": 1,
+        "pattern": "\\S",
+        "title": "Title",
+        "type": "string"
+      },
+      "goal": {
+        "maxLength": 20000,
+        "minLength": 1,
+        "pattern": "\\S",
+        "title": "Goal",
+        "type": "string"
+      },
+      "members": {
+        "items": {
+          "$ref": "#/$defs/PilotMember"
+        },
+        "maxItems": 4,
+        "minItems": 4,
+        "title": "Members",
+        "type": "array"
+      }
+    },
+    "required": [
+      "title",
+      "goal",
+      "members"
+    ],
+    "title": "PilotSetup",
+    "type": "object"
+  }
+}

@@ -1,0 +1,52 @@
+:root { color-scheme: light; --ink: #24362e; --paper: #f6f5ef; --line: #c6cec5; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: Arial, Helvetica, sans-serif; }
+main { max-width: 1200px; margin: 0 auto; padding: 32px; }
+header, .account, .actions, .feed-header { display: flex; align-items: center; gap: 12px; }
+header { font-weight: 700; padding-bottom: 24px; border-bottom: 1px solid var(--line); }
+.mark { background: var(--ink); color: var(--paper); border-radius: 10px; padding: 9px 10px; letter-spacing: -2px; }
+.tag, .account { margin-left: auto; font-size: 13px; }
+.tag { border: 1px solid #b7c1b8; border-radius: 24px; padding: 8px 12px; font-weight: 400; }
+section { padding: 48px 0 64px; }
+.welcome { display: grid; grid-template-columns: 1.3fr 1fr; gap: 64px; align-items: center; min-height: 76vh; }
+.eyebrow { text-transform: uppercase; letter-spacing: .16em; font-size: 12px; }
+h1 { font-family: Georgia, serif; font-size: clamp(32px, 4vw, 54px); font-weight: 400; line-height: 1.13; letter-spacing: -.04em; margin: 24px 0; overflow-wrap: anywhere; }
+h2 { font-size: 20px; margin: 0 0 12px; font-weight: 600; }
+h3 { font-size: 21px; margin: 18px 0 12px; overflow-wrap: anywhere; }
+.intro { font-size: 18px; line-height: 1.6; max-width: 720px; color: #4e6056; white-space: pre-wrap; overflow-wrap: anywhere; }
+.panel { border: 1px solid var(--line); border-radius: 12px; padding: 26px; background: #fdfdf9; }
+.panel > p, form > p { color: #536357; font-size: 14px; line-height: 1.6; }
+label { display: block; font-size: 14px; font-weight: 600; margin: 22px 0 8px; }
+.optional { color: #536357; font-weight: 400; }
+input, textarea, select { display: block; width: 100%; border: 1px solid #9ba99e; border-radius: 6px; font: inherit; color: inherit; background: #fff; padding: 11px; }
+textarea { min-height: 160px; line-height: 1.6; resize: vertical; }
+button { border: 1px solid transparent; border-radius: 6px; background: var(--ink); color: white; padding: 11px 16px; font: inherit; font-size: 14px; cursor: pointer; }
+form > button, form > .actions { margin-top: 22px; }
+button.secondary { color: var(--ink); background: transparent; border-color: #9ba99e; }
+button.text-button { color: var(--ink); background: transparent; padding: 8px 4px; text-decoration: underline; text-underline-offset: 3px; }
+button:hover { filter: brightness(.9); }
+button:disabled { opacity: .55; cursor: default; }
+:focus-visible { outline: 3px solid #267260; outline-offset: 3px; }
+.connection { display: flex; gap: 10px; align-items: center; margin: 24px 0; font-size: 14px; }
+.dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #896a32; }
+.dot.ready { background: #386748; }
+.error { background: #fff1ed; border: 1px solid #c67f6b; color: #853822 !important; padding: 14px; border-radius: 6px; line-height: 1.5; }
+.notice { color: #2d6347 !important; }
+.members { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; padding: 0; margin: 24px 0 36px; }
+.members li { border: 1px solid var(--line); border-radius: 30px; padding: 8px 13px; font-size: 13px; }
+.members span { color: #536357; }
+.workspace-grid { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(280px, 1fr); gap: 32px; align-items: start; }
+.feed-header { justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; }
+.feed-header h2 { margin: 0; }
+.idea-list { display: grid; gap: 18px; }
+.idea-meta { display: flex; gap: 16px; justify-content: space-between; font-size: 12px; color: #536357; }
+.idea-body { white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.7; font-size: 15px; }
+.idea .actions { margin-top: 20px; flex-wrap: wrap; }
+.history { margin-top: 20px; border-top: 1px solid var(--line); padding-top: 8px; }
+.history > div { border-left: 2px solid var(--line); padding-left: 16px; margin: 20px 0; }
+.history strong { font-size: 13px; }
+.workspace-picker { max-width: 320px; }
+.workspace-picker select { margin-top: 8px; }
+footer { font-size: 13px; line-height: 1.7; color: #536357; border-top: 1px solid var(--line); padding: 20px 0; }
+@media (max-width: 800px) { .welcome { grid-template-columns: 1fr; gap: 24px; } .workspace-grid { grid-template-columns: 1fr; } .workspace-grid aside { grid-row: 1; } }
+@media (max-width: 500px) { main { padding: 20px; } .panel { padding: 20px; } .account { gap: 8px; } section { padding: 32px 0; } }

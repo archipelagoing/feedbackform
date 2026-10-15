@@ -2,10 +2,14 @@
 
 Last updated: 2026-10-15.
 
-Current state: Product and technical specifications only. [idea.md](idea.md) defines the concept and
-[projBible.md](projBible.md) defines product intent. Repository inspection found
-no application code, dependency manifests, tests, or deployment configuration.
-No runtime behavior has been verified. The next milestone is a constrained,
+Current state: Authenticated idea capture works. A one-time CLI provisions four
+participants; the web app supports cookie login/logout, a shared workspace,
+attributed ideas, author-only versioned editing, and history. Membership, Origin,
+CSRF, session expiry, and stale edits are checked on the backend. The foundation
+has 32 tables, strict schemas, migrations, and pinned dependencies. 31 backend
+tests and five browser tests pass, as do typecheck, production build, and Ruff.
+Annotations, AI runs, proposal reviews/decisions, and GitHub publication remain
+unimplemented. The next milestone is a constrained,
 four-participant workflow from ideas and feedback to reviewed proposals, with a
 real ticketing integration. Course dates follow [project-requirements.pdf](project-requirements.pdf),
 per the user's clarification: proposal November 12, final presentation December 3,
@@ -29,13 +33,14 @@ ticket imports and bidirectional status sync are deferred.
 
 ## Next steps
 
-1. Scaffold the selected Next.js/FastAPI/SQLite stack and implement executable
-   schemas and migrations from `docs/data-model.md` in section 2.
+1. Add whole-idea and anchored passage comments with author attribution and
+   immutable source-version references in section 3.
 2. Define the primary evaluation question and initial labeled cases in section 7
    before prompt tuning.
-3. Set up the local application and controlled pilot access in section 2.
-4. Complete persistent idea capture and passage comments in section 3.
-5. Connect extraction, correction, and two-candidate synthesis in sections 4–5.
+3. Verify comment anchoring after idea edits and keyboard-accessible commenting
+   in section 3.
+4. Connect extraction and human correction in section 4, then two-candidate
+   synthesis in section 5.
 
 The user accepted the MVP and pilot rules on 2026-10-15. Stack and versioned data
 contracts are now defined in `docs/architecture.md` and `docs/data-model.md`.
@@ -165,38 +170,55 @@ and feasibility still need team review. November 22 is no longer a course deadli
 - [x] Define record contracts for source references, preferences, constraints,
   themes/tensions, proposal features, reviews, decisions, and workflow events.
   Distinguish inferred preferences, participant confirmation, and group acceptance.
-  See [data-model.md](docs/data-model.md); these are specifications, not runtime models.
-- [ ] Implement Pydantic boundary schemas, relational models, and migrations from
-  those contracts; verify same-workspace references and domain transition checks.
+  See [data-model.md](docs/data-model.md) and the corresponding backend models/schemas.
+- [x] Implement Pydantic boundary schemas, relational models, and the initial
+  migration. Verify same-workspace foreign keys, immutable history, source
+  attribution, UTF-16 anchors, and idea edit ownership/stale-version checks.
+  Feature-specific decision, constraint, and ticket transitions remain in sections 4–6.
 - [x] Define immutable idea and proposal versions. Anchor comments and feature
   evidence to exact source versions; attach each review to the proposal version
   reviewed. A later edit must not inherit approval automatically.
 - [x] Define analysis snapshots: record input versions, preference/constraint
   revisions, model and prompt versions, and run IDs. Mark results stale when
   their inputs change rather than presenting them as current.
-- [ ] Scaffold frontend, backend, persistence, migrations, environment examples,
+- [x] Scaffold frontend, backend, persistence, migrations, environment examples,
   and documented local startup commands without committed secrets.
-- [ ] Implement controlled pilot identities and workspace membership checks on
-  reads and writes. Verify that another identity cannot impersonate a reviewer
-  or access a workspace without membership.
-- [ ] Verify a local round trip: a participant creates an idea, reloads the page,
+- [x] Implement controlled pilot identities and workspace membership checks on
+  available reads/writes. Reject client-supplied actor IDs and cross-workspace
+  access. Review-specific impersonation checks remain part of section 6.
+- [x] Verify a local round trip: a participant creates an idea, reloads the page,
   and retrieves the same attributed content from persistent storage.
 
-Progress (2026-10-15): Selected stack and documented versioned records, stage
-payloads, snapshot freshness, constraint acceptance, review rounds, decision
-validation, and GitHub batch/retry contracts. Consulted official framework and
-GitHub documentation linked in the architecture. Local tools: Node 24.10.0,
-npm 11.6.0, Python 3.14.7; Pydantic is not installed in the inspected interpreter.
-Dependencies, executable schemas, migrations, authentication, and runtime checks
-remain unimplemented. No application behavior has been verified.
-Documentation checks: local links resolved across README, checklist, product
-bible, architecture, and data contracts; `git diff --check` reported no whitespace errors.
+Progress (2026-10-15): `backend/app/db/models.py` defines 32 tables;
+`backend/app/api/schemas.py` defines strict commands and stage outputs. Migration
+`0001_foundation` installs composite foreign keys and immutable-history triggers.
+`backend/app/domain/` implements foundational version/evidence validation, not
+the complete product services. API returns readiness only after migration.
+Generated OpenAPI/boundary JSON and frontend types are source artifacts ready for version control.
+`uv.lock` and `package-lock.json` pin installed dependencies on Python 3.14.7/Node 24.10.0.
+Verified: 31 backend tests passed, including empty/populated migration rollback,
+every migrated foreign key, historical edit/delete rejection, stale edits,
+source ownership/manifest checks, and Unicode anchors. Ruff lint/format,
+`alembic check`, TypeScript checking, and Next.js production build passed.
+All five Playwright checks passed against real local servers, including four
+independent participant sessions, attributed sharing, reload persistence, version
+history, author-only edit controls, logout, failed-save draft preservation, and
+simulated session expiry/API failure. Visually inspected the desktop Chromium
+workspace screenshot. Real pilot accounts are not provisioned automatically:
+run `uv run python -m app.seed` from `backend/` once; no default real credentials
+are shipped. Known test credentials are restricted to the isolated e2e seed.
+Documentation links resolve and `git diff --check` passes. Local runtime data,
+dependencies, screenshots, and credentials remain ignored.
+Known tooling warnings: Alembic's table-sort warning for intentional version/head
+cycles and Starlette's httpx test-client deprecation. Model calls, proposal reviews,
+and external GitHub actions remain unverified/unbuilt. No new migration was needed
+for login/idea routes; the existing schema supports this milestone.
 
 ## 3. Capture ideas and contextual feedback
 
-- [ ] Build one workspace view showing its decision question, participants,
+- [x] Build one workspace view showing its decision question, participants,
   ideas, and next action; avoid requiring separate full-featured screens.
-- [ ] Support one-sentence ideas with optional titles and attribution. Editing
+- [x] Support one-sentence ideas with optional titles and attribution. Editing
   creates a version while retaining the original contribution.
 - [ ] Support whole-idea comments and passage comments. For passages, persist
   the quote, source version, offsets, and surrounding context; reload must show
@@ -207,8 +229,12 @@ bible, architecture, and data contracts; `git diff --check` reported no whitespa
 - [ ] Verify with four pilot identities that comments remain attributed and
   readable after reload and that an edit does not silently move feedback.
 
-Progress: No capture or annotation UI exists. Start with immutable source
-versions rather than promising automatic re-anchoring across arbitrary edits.
+Progress (2026-10-15): Authenticated capture/edit/history UI and API are implemented
+in `web/src/app/page.tsx` and `backend/app/api/routes.py`. Four-session browser
+checks verify sharing and persistence; API checks reject non-author edits, stale
+versions, cross-workspace IDs, actor spoofing, and invalid CSRF/Origin headers.
+Comments and annotation UI remain unbuilt. Use immutable source versions before
+attempting automatic re-anchoring across arbitrary edits.
 Threaded replies, quick reactions, and richer navigation are deferred below
 under the agreed scope decision in section 1.
 

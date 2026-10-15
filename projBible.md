@@ -324,7 +324,13 @@ The relational model uses immutable source/proposal versions, append-only
 preference and review history, explicit four-person constraint acceptance,
 frozen analysis manifests, and decision records tied to exact review events.
 GitHub publication uses immutable authorized ticket batches and per-item outcomes.
-These are definitions; executable schemas and migrations are not implemented yet.
+Foundation status, October 15, 2026: executable SQLAlchemy records and Pydantic
+boundary schemas exist in `backend/app/`, with migration `0001_foundation` and
+tests for database integrity and version/evidence helpers. Four-account local
+provisioning, cookie login/logout, member-scoped workspace/idea HTTP routes, and
+idea capture/edit/history UI are implemented. Annotations, AI execution, proposal
+review/decision transitions, and GitHub publishing remain unimplemented. See README
+for setup and verification commands.
 
 
 11.1 Data integrity

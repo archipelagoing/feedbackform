@@ -1,7 +1,12 @@
 # FeedbackForm versioned data contracts
 
-Status: Implementation specification, 2026-10-15. This defines records and
-validation obligations, not installed database models or verified endpoints.
+Status: Foundational schemas implemented, 2026-10-15. SQLAlchemy records are in
+`backend/app/db/models.py`; strict command and workflow boundaries are in
+`backend/app/api/schemas.py`. The initial migration installs composite foreign
+keys and immutable-history triggers. Authenticated workspace reads, idea
+creation/versioned editing, and history are exposed; session and workspace-view
+boundaries are in `backend/app/api/workspace_schemas.py`. Annotations and later
+feature transitions remain unimplemented.
 See [architecture.md](architecture.md) for the selected stack and execution plan.
 
 ## Shared types and enforcement
@@ -12,12 +17,12 @@ wire values. Every workspace-owned record carries `workspace_id`, even when not
 repeated in the compact field lists below. Join tables enforce references within
 the same workspace through composite foreign keys or equivalent checked writes.
 
-Pydantic models will forbid unknown fields, validate enums and limits, and
+Pydantic boundary models forbid unknown fields, validate enums and limits, and
 distinguish omitted values from null. Relational checks verify source existence,
 workspace, version, actor permissions, and current state before commit. JSON
 syntax or a model's self-reported confidence cannot establish semantic correctness.
-Text limits, collection limits, and schema versions must be explicit in executable
-models during scaffolding. The frontend derives types from the API's OpenAPI
+Text limits, collection limits, and schema versions are explicit in executable
+boundary models. The frontend derives types from the API's OpenAPI
 schema rather than maintaining a second set of independent contracts.
 
 `EvidenceRef` is a discriminated union:
@@ -170,9 +175,19 @@ and proposal IDs; their existence does not mean later proposal versions are appr
 
 ## Verification obligations for implementation
 
-This specification is reviewed for the agreed workflow; it does not enforce itself.
-Before completing the runnable-foundation milestone, executable schemas and
-migrations must cover the records above. Add focused checks for cross-workspace
-references, Unicode anchors, unauthorized confirmations, conflicting edits, stale
-snapshots, constraint withdrawal, review revision, decision races, and partial or
-ambiguous ticket publication. Do not mark these behaviors working based on this document.
+SQLAlchemy storage uses `version` and `current_version_id` consistently, including
+records called revisions above. The common UTC `created_at` field represents
+joined/opened/authorized/decided/start times; mutable terminal timestamps retain
+their own fields. Review and constraint events include an explicit sequence to
+order a participant's responses without relying on timestamp ties. Ticket batch
+items also retain their repository to enforce draft/destination uniqueness.
+
+Executable schemas and migrations cover the records above. SQL checks enforce
+scoped foreign keys, uniqueness, enums, and append-only historical records, not
+the meaning of JSON evidence or permission to approve a decision. The initial
+domain helpers check idea edit ownership, stale edits, source existence/scope,
+participant attribution, snapshot evidence membership, and UTF-16 anchors.
+Tests cover those foundation paths. Complete request-time validation and tests
+for confirmation, snapshots, constraint withdrawal, review revision, decision
+races, and partial/ambiguous ticket publication as each feature service is added.
+Do not expose write routes before their authentication and domain checks exist.
