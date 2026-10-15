@@ -1,14 +1,21 @@
 import { defineConfig } from "@playwright/test";
+import { randomUUID } from "node:crypto";
+
+const databaseUrl = `sqlite:///./data/e2e-${randomUUID()}.db`;
 
 export default defineConfig({
   testDir: "./e2e",
   fullyParallel: false,
   retries: 0,
+  projects: [
+    { name: "setup", testMatch: /onboarding\.setup\.ts/ },
+    { name: "chromium", testMatch: /.*\.spec\.ts/, dependencies: ["setup"] },
+  ],
   use: { baseURL: "http://127.0.0.1:3100", browserName: "chromium" },
   webServer: [
     {
-      command: "cd ../backend && .venv/bin/alembic upgrade head && .venv/bin/python -m tests.seed_e2e && .venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 18080",
-      env: { FEEDBACKFORM_DATABASE_URL: "sqlite:///./data/e2e.db", FEEDBACKFORM_ALLOWED_ORIGINS: "http://127.0.0.1:3100", FEEDBACKFORM_SECURE_COOKIES: "0" },
+      command: "cd ../backend && .venv/bin/alembic upgrade head && .venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 18080",
+      env: { FEEDBACKFORM_DATABASE_URL: databaseUrl, FEEDBACKFORM_ALLOWED_ORIGINS: "http://127.0.0.1:3100", FEEDBACKFORM_SECURE_COOKIES: "0" },
       url: "http://127.0.0.1:18080/api/health",
       reuseExistingServer: false,
       timeout: 60_000,

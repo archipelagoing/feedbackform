@@ -1,10 +1,9 @@
-import secrets
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, datetime
 from typing import Annotated
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response
-from sqlalchemy import select, update
+from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError, OperationalError
 
 from app.api.schemas import IdeaCreate, IdeaEdit
@@ -21,13 +20,12 @@ from app.auth import (
     AUTH,
     COOKIE_NAME,
     DB,
-    SESSION_SECONDS,
     csrf_token,
     member_or_404,
     require_browser_write,
     require_csrf,
     secure_cookies,
-    token_hash,
+    start_session,
     verify_password,
 )
 from app.db import models as m
@@ -66,31 +64,8 @@ def login(body: LoginRequest, request: Request, response: Response, db: DB):
     valid = verify_password(body.password.get_secret_value(), encoded)
     if not valid or user is None:
         raise HTTPException(401, "Login name or password is incorrect")
-    old = request.cookies.get(COOKIE_NAME)
-    if old:
-        db.execute(
-            update(m.Session)
-            .where(m.Session.token_hash == token_hash(old))
-            .values(revoked_at=datetime.now(UTC))
-        )
-    raw = secrets.token_urlsafe(32)
-    db.add(
-        m.Session(
-            user_id=user.id,
-            token_hash=token_hash(raw),
-            expires_at=datetime.now(UTC) + timedelta(seconds=SESSION_SECONDS),
-        )
-    )
+    raw = start_session(db, user.id, response, request.cookies.get(COOKIE_NAME))
     db.commit()
-    response.set_cookie(
-        COOKIE_NAME,
-        raw,
-        httponly=True,
-        secure=secure_cookies(),
-        samesite="strict",
-        max_age=SESSION_SECONDS,
-        path="/api",
-    )
     return AuthView(user=user_view(user), csrf_token=csrf_token(raw))
 
 

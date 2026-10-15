@@ -327,8 +327,11 @@ GitHub publication uses immutable authorized ticket batches and per-item outcome
 Foundation status, October 15, 2026: executable SQLAlchemy records and Pydantic
 boundary schemas exist in `backend/app/`, with migration `0001_foundation` and
 tests for database integrity and version/evidence helpers. Four-account local
-provisioning, cookie login/logout, member-scoped workspace/idea HTTP routes, and
-idea capture/edit/history UI are implemented. Annotations, AI execution, proposal
+provisioning (now available through the frontend wizard), cookie login/logout,
+member-scoped workspace/idea HTTP routes, and
+idea capture/edit/history UI are implemented. Whole-idea and passage comments,
+current-version highlights, original-context inspection, and keyboard passage
+selection are implemented. Annotation edits/withdrawal, AI execution, proposal
 review/decision transitions, and GitHub publishing remain unimplemented. See README
 for setup and verification commands.
 

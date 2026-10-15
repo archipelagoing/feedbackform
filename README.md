@@ -3,11 +3,14 @@
 A collaborative workspace for turning ideas and feedback into evidence-linked
 proposals, explicit group decisions, and reviewed GitHub implementation tickets.
 
-Current stage: authenticated idea workspace. Four provisioned participants can
+Current stage: authenticated idea workspace with browser-based first-run setup.
+On an empty database, the frontend collects the workspace question and four
+participant accounts, then signs in the first participant as owner. Participants can
 sign in, see their shared decision question and roster, post rough ideas, edit
-their own ideas as new versions, and inspect history. Sessions survive reload and
-are revoked on logout. The backend enforces membership and author-only edits.
-Annotation UI, AI execution, proposal reviews/decisions, and GitHub publication
+their own ideas as new versions, inspect history, and comment on complete ideas
+or exact passages. Sessions survive reload and are revoked on logout. The backend
+enforces membership, author-only edits, and exact source-version anchors.
+AI execution, proposal reviews/decisions, and GitHub publication
 remain unimplemented. No model or GitHub credentials are needed for this milestone.
 
 ## Local setup
@@ -23,7 +26,6 @@ Start the backend in one terminal:
 cd backend
 uv sync --frozen
 uv run alembic upgrade head
-uv run python -m app.seed
 uv run uvicorn app.main:app --host 127.0.0.1 --port 8000
 ```
 
@@ -35,17 +37,29 @@ npm ci
 npm run dev
 ```
 
-Run `app.seed` once on an empty migrated database. It prompts for the workspace
-question and four names/logins/passwords; passwords are entered without echo,
-must be 12–256 characters, and are stored only as salted scrypt hashes.
-The first participant owns the workspace. The command refuses to overwrite
-existing accounts or workspaces; skip it on later starts. No default production
-accounts or passwords are installed.
+Open [the local app](http://127.0.0.1:3000). On the first visit, follow the setup
+wizard: enter the workspace name and decision question, then four display names,
+login names, passwords, and password confirmations. Passwords must be 12–256
+characters; duplicate logins and mismatched confirmations are rejected. Setup
+creates all four accounts atomically and signs you in as participant 1, the owner.
+On later visits, sign in normally. Setup cannot overwrite existing accounts or
+workspaces, and no default production credentials are installed. Passwords stay
+in form memory until submission and are stored only as salted scrypt hashes.
+There is no terminal account-setup step. The optional `app.seed` command remains
+available for headless local provisioning; it uses the same empty-database guard.
 
-Open [the local app](http://127.0.0.1:3000), sign in with a provisioned account,
-and share an idea. Reload to retrieve it, edit it to create a new version, and
+After signing in, share an idea. Reload to retrieve it, edit it to create a new version, and
 use View history to inspect the original. [API documentation](http://127.0.0.1:8000/docs)
 lists the available routes.
+To discuss an idea, use Comment on idea, or select text in its body and choose
+Comment on selected passage. The keyboard alternative opens a passage search
+field: type the exact passage, Tab to the matching excerpt's comment button, and
+Enter to open the comment form. Repeated matches show surrounding text so you can
+choose the occurrence you mean. Saved passages are highlighted on their source
+version. Comments include author/time, quoted text, and an expandable original
+context. After an idea edit, earlier comments stay labeled with their original
+version and are not relocated onto the new text. Use Refresh comments to fetch
+other participants' feedback; live synchronization is not implemented.
 `GET /api/health` returns 503 until the expected database migration is installed.
 Startup never creates tables implicitly; apply migrations explicitly.
 
@@ -88,12 +102,15 @@ npm run test:e2e
 ```
 
 The browser tests start and stop their own API and production web servers on
-ports 18080 and 3100. They migrate an isolated, ignored `backend/data/e2e.db` and
-provision four test-only identities in that database. They verify real proxy
+ports 18080 and 3100. Each run migrates a fresh, ignored `backend/data/e2e-<id>.db`.
+A dependency test provisions four test-only identities through the actual browser
+wizard before the remaining checks run. They verify real proxy
 connectivity, four-person sign-in and sharing, reload persistence, author-only
 edit controls, version history, logout, and simulated failure/session-expiry
-states. Known browser-test credentials exist only in test code and the guarded
-test seed; never use that seed against a real workspace. Backend tests use
+states. Annotation checks additionally cover mouse/keyboard selection, repeated
+phrases, emoji/CRLF offsets, persistence, and earlier-version context after edits.
+Known browser-test credentials exist only in test code and the isolated test
+database; never use them for a real workspace. Backend tests use
 temporary databases and check password/session behavior, Origin/CSRF protection,
 membership isolation, stale edits, migrations, history, and input boundaries.
 
@@ -111,7 +128,7 @@ From `backend/`, run `uv run python -m scripts.export_contracts` to regenerate
 schemas, including the discriminated workflow envelope. From `web/`, run
 `npm run generate:api` to regenerate frontend API types. These commands require
 no running server, database, or external account. Generated types cover health,
-auth, workspace reads, idea capture/editing, and history. Further command schemas
+setup, auth, workspace reads, idea capture/editing, history, and annotation create/list routes. Further command schemas
 will appear in OpenAPI as their routes are implemented.
 
 ## Project references

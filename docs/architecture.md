@@ -2,7 +2,10 @@
 
 Status: Authenticated idea capture implemented, 2026-10-15. The web login/workspace
 UI, session endpoints, member-scoped idea routes, schema artifacts, database
-records, and initial migration exist. Annotations, AI execution, proposal reviews,
+records, and initial migration exist. Browser-based first-run setup collects the
+workspace and four accounts and opens an owner session. Whole-idea and passage annotation routes/UI
+are implemented with exact-source validation, persisted highlights, original
+context, and a keyboard selection alternative. AI execution, proposal reviews,
 decisions, and GitHub publication are pending.
 Product intent is in [projBible.md](../projBible.md); the concrete
 record contracts are in [data-model.md](data-model.md).
@@ -57,18 +60,25 @@ evaluation/                 Labeled cases, baseline runners, reports
 web/e2e/                    Essential Playwright flows
 ```
 
-For the pilot, provision four participant identities through a local admin/seed
-command. Give each an independent login secret, store only password hashes, and
+For the pilot, provision four participant identities through the frontend's
+first-run wizard. Give each an independent login secret, store only password hashes, and
 use opaque server-side sessions with HttpOnly cookies. Do not use a browser-supplied
 `user_id` as authentication. The authenticated identity supplies actors for all
 commands. Credentials and session rows stay outside exports and model inputs.
-Implemented in `app/auth.py`, `app/api/routes.py`, and `app/seed.py`: salted scrypt
+Implemented in `app/auth.py`, `app/api/routes.py`, `app/api/setup.py`, and `app/seed.py`: salted scrypt
 hashes, hashed random session tokens, eight-hour expiry, logout revocation,
 HttpOnly/SameSite cookies, explicit allowed Origin checks, and a session-bound
 CSRF header. Login uses a custom browser header plus Origin validation. API
 responses disable caching. A bounded per-peer login limiter applies to the local
-single process. See README for environment options and the one-time seed command.
+single process. Setup is a same-origin, one-time bootstrap operation permitted
+only if neither accounts nor workspaces exist; its check, four accounts, policy,
+and initial owner session commit in one reserved write transaction. Concurrent
+attempts cannot overwrite the winner. The CLI is an optional headless alternative.
+See README for environment options and frontend setup.
 Each implemented product route checks the authenticated actor's workspace membership.
+Annotation creation also verifies that the referenced source version belongs to
+the requested idea and that the selected quote/offsets/context match exactly.
+Older source versions can receive feedback, explicitly labeled historical.
 Idea edits also require authorship and an expected version. The test suite covers
 these boundaries; future feature routes must apply the same protection.
 
@@ -99,7 +109,12 @@ cases; the primary question is still tracked in `todo.md` §7.
 ## Persistence and authorization rules
 
 Enable SQLite foreign keys on every connection, use short transactions and a
-busy timeout, and serialize conflicting writes. Treat migration scripts as the
+busy timeout, and serialize conflicting writes. HTTP write requests acquire
+`BEGIN IMMEDIATE` before their first read to avoid deferred read-to-write lock
+upgrade failures; read requests retain ordinary transactions. A regression test
+covers simultaneous sign-ins against one file-backed database. Keep these write
+transactions short and commit before any future model/network operation.
+Treat migration scripts as the
 authority for database evolution. Application role checks supplement database
 foreign keys: a valid user reference does not establish permission to act.
 

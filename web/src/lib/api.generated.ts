@@ -124,6 +124,58 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/workspaces/{workspace_id}/ideas/{idea_id}/annotations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Annotations */
+        get: operations["list_annotations_api_workspaces__workspace_id__ideas__idea_id__annotations_get"];
+        put?: never;
+        /** Post Annotation */
+        post: operations["post_annotation_api_workspaces__workspace_id__ideas__idea_id__annotations_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/setup/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Setup Status */
+        get: operations["setup_status_api_setup_status_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/setup": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Setup */
+        post: operations["setup_api_setup_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/health": {
         parameters: {
             query?: never;
@@ -145,6 +197,65 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** AnnotationCreate */
+        AnnotationCreate: {
+            /**
+             * Idea Version Id
+             * Format: uuid
+             */
+            idea_version_id: string;
+            /**
+             * Anchor
+             * @enum {string}
+             */
+            anchor: "whole_idea" | "passage";
+            span?: components["schemas"]["Span"] | null;
+            /** Body */
+            body: string;
+        };
+        /** AnnotationView */
+        AnnotationView: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Version Id
+             * Format: uuid
+             */
+            version_id: string;
+            /**
+             * Idea Id
+             * Format: uuid
+             */
+            idea_id: string;
+            /**
+             * Idea Version Id
+             * Format: uuid
+             */
+            idea_version_id: string;
+            /** Source Version */
+            source_version: number;
+            /** Source Body */
+            source_body: string;
+            /** Historical */
+            historical: boolean;
+            /**
+             * Anchor
+             * @enum {string}
+             */
+            anchor: "whole_idea" | "passage";
+            span: components["schemas"]["Span"] | null;
+            /** Body */
+            body: string;
+            author: components["schemas"]["UserView"];
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+        };
         /** AuthView */
         AuthView: {
             user: components["schemas"]["UserView"];
@@ -256,6 +367,51 @@ export interface components {
              * @enum {string}
              */
             role: "owner" | "participant";
+        };
+        /** PilotMember */
+        PilotMember: {
+            /** Login Name */
+            login_name: string;
+            /** Display Name */
+            display_name: string;
+            /**
+             * Password
+             * Format: password
+             */
+            password: string;
+        };
+        /** PilotSetup */
+        PilotSetup: {
+            /** Title */
+            title: string;
+            /** Goal */
+            goal: string;
+            /** Members */
+            members: components["schemas"]["PilotMember"][];
+        };
+        /** SetupStatus */
+        SetupStatus: {
+            /** Needed */
+            needed: boolean;
+        };
+        /** Span */
+        Span: {
+            /** Start Utf16 */
+            start_utf16: number;
+            /** End Utf16 */
+            end_utf16: number;
+            /** Quote */
+            quote: string;
+            /**
+             * Prefix
+             * @default
+             */
+            prefix: string;
+            /**
+             * Suffix
+             * @default
+             */
+            suffix: string;
         };
         /** UserView */
         UserView: {
@@ -522,6 +678,130 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["IdeaHistoryView"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_annotations_api_workspaces__workspace_id__ideas__idea_id__annotations_get: {
+        parameters: {
+            query?: {
+                offset?: number;
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                workspace_id: string;
+                idea_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AnnotationView"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    post_annotation_api_workspaces__workspace_id__ideas__idea_id__annotations_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                workspace_id: string;
+                idea_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AnnotationCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AnnotationView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    setup_status_api_setup_status_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SetupStatus"];
+                };
+            };
+        };
+    };
+    setup_api_setup_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PilotSetup"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuthView"];
                 };
             };
             /** @description Validation Error */

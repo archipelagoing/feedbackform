@@ -5,8 +5,12 @@ Status: Foundational schemas implemented, 2026-10-15. SQLAlchemy records are in
 `backend/app/api/schemas.py`. The initial migration installs composite foreign
 keys and immutable-history triggers. Authenticated workspace reads, idea
 creation/versioned editing, and history are exposed; session and workspace-view
-boundaries are in `backend/app/api/workspace_schemas.py`. Annotations and later
-feature transitions remain unimplemented.
+boundaries are in `backend/app/api/workspace_schemas.py`. Whole-idea and passage
+annotation creation/listing are implemented in `backend/app/api/annotations.py`.
+Comment edit/withdrawal and later feature transitions remain unimplemented.
+The initial workspace and four identities can be provisioned through the frontend
+using the validated `PilotSetup` command; this is disabled once any account or
+workspace exists. It commits all records and the owner's session atomically.
 See [architecture.md](architecture.md) for the selected stack and execution plan.
 
 ## Shared types and enforcement
@@ -64,10 +68,18 @@ the first pilot once reviewing starts.
 | `annotations` | `author_id`, `idea_version_id`, `anchor: whole_idea\|passage`, `span?`, `current_version_id` | Always references an immutable idea version; passage spans require a verified quote. |
 | `annotation_versions` | `annotation_id`, `version`, `body`, `previous_version_id?`, `withdrawn: boolean` | Immutable; only author edits/withdraws; retains original anchor. |
 
-Do not auto-migrate annotations onto edited text. Show the source version and
+Implemented annotation behavior: do not auto-migrate annotations onto edited text. Show the source version and
 an explicit historical-anchor label. An optional relocation is a new, verified
 anchor and cannot rewrite old evidence. No threaded replies or reactions are
 required by these contracts.
+
+The annotation response returns the exact immutable `source_body`, numeric source
+version, quote/span, author, timestamp, and whether the source differs from the
+idea's current head. The UI highlights only spans whose source is the displayed
+version. Mouse selection uses DOM ranges; the keyboard path finds exact matching
+excerpts with surrounding context and maps normalized LF search offsets back to
+source CRLF offsets without rewriting stored text. The complete
+immutable body provides surrounding context even when prefix/suffix are empty.
 
 ## Preferences and binding constraints
 

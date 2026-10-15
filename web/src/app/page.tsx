@@ -3,6 +3,8 @@
 import { FormEvent, useEffect, useState } from "react";
 import type { components } from "@/lib/api.generated";
 import { api, ApiError } from "@/lib/api";
+import IdeaDiscussion from "./idea-discussion";
+import SetupForm from "./setup-form";
 
 type Auth = components["schemas"]["AuthView"];
 type Workspace = components["schemas"]["WorkspaceView"];
@@ -85,7 +87,7 @@ function IdeaCard({ idea, own, csrf, onRefresh, onAuthError }: {
         }}>Cancel edit</button></div>
     </form> : <>
       {idea.title && <h3>{idea.title}</h3>}
-      <p className="idea-body">{idea.body}</p>
+      <IdeaDiscussion idea={idea} csrf={csrf} onAuthError={onAuthError} />
       <div className="actions">
         {own && <button className="secondary" disabled={pending} onClick={() => {
           setTitle(idea.title ?? ""); setBody(idea.body); setBaseVersion(idea.version_id);
@@ -170,7 +172,7 @@ export default function Home() {
   const [auth, setAuth] = useState<Auth | null>(null);
   const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
   const [selected, setSelected] = useState("");
-  const [state, setState] = useState<"boot" | "ready" | "unavailable">("boot");
+  const [state, setState] = useState<"boot" | "setup" | "ready" | "unavailable">("boot");
   const [error, setError] = useState("");
   async function enter(auth: Auth) {
     const rows = await api<Workspace[]>("/workspaces");
@@ -180,6 +182,8 @@ export default function Home() {
     setState("boot");
     try {
       await api("/health");
+      const setup = await api<components["schemas"]["SetupStatus"]>("/setup/status");
+      if (setup.needed) { setState("setup"); return; }
       try { await enter(await api<Auth>("/auth/me")); }
       catch (error) { if (!(error instanceof ApiError && error.status === 401)) throw error; }
       setState("ready");
@@ -205,6 +209,7 @@ export default function Home() {
         : <span className="tag">Team pilot</span>}</header>
     {error && <p className="error" role="alert">{error}</p>}
     {state === "boot" && <p className="connection" role="status">Opening your workspace…</p>}
+    {state === "setup" && <SetupForm onComplete={enter} onAlreadySetup={() => void boot()} />}
     {state === "unavailable" && <section className="welcome"><h1>Your workspace is taking a moment.</h1>
       <p role="status">Connection unavailable. Try again shortly or ask your team owner for help.</p>
       <button onClick={() => void boot()}>Try again</button></section>}

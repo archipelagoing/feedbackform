@@ -24,6 +24,11 @@ def build_engine(url: str) -> Engine:
 
     @event.listens_for(engine, "begin")
     def begin(connection):
-        connection.exec_driver_sql("BEGIN")
+        # Reserve a writer before reading: deferred read-to-write upgrades can
+        # deadlock against another writer despite busy_timeout.
+        statement = (
+            "BEGIN IMMEDIATE" if connection.get_execution_options().get("sqlite_write") else "BEGIN"
+        )
+        connection.exec_driver_sql(statement)
 
     return engine

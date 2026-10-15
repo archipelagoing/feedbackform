@@ -9,7 +9,9 @@ from pydantic import BaseModel, ConfigDict
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 
+from app.api.annotations import router as annotation_router
 from app.api.routes import router
+from app.api.setup import router as setup_router
 from app.auth import hash_password
 from app.config import database_url
 from app.db.connection import build_engine
@@ -47,6 +49,8 @@ def create_app(url: str | None = None, allowed_origins: set[str] | None = None) 
 
     app = FastAPI(title="FeedbackForm API", version="0.1.0", lifespan=lifespan)
     app.include_router(router)
+    app.include_router(annotation_router)
+    app.include_router(setup_router)
 
     @app.middleware("http")
     async def private_responses(request, call_next):

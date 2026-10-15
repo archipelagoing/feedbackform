@@ -2,9 +2,24 @@ from datetime import datetime
 from typing import Annotated, Literal
 from uuid import UUID
 
-from pydantic import Field, SecretStr
+from pydantic import Field, SecretStr, model_validator
 
-from app.api.schemas import Body, Contract, ShortText
+from app.api.schemas import Body, Contract, ShortText, Span
+
+
+class AnnotationView(Contract):
+    id: UUID
+    version_id: UUID
+    idea_id: UUID
+    idea_version_id: UUID
+    source_version: int
+    source_body: str
+    historical: bool
+    anchor: Literal["whole_idea", "passage"]
+    span: Span | None
+    body: str
+    author: "UserView"
+    created_at: datetime
 
 
 class LoginRequest(Contract):
@@ -66,3 +81,13 @@ class PilotSetup(Contract):
     title: ShortText
     goal: Body
     members: Annotated[list[PilotMember], Field(min_length=4, max_length=4)]
+
+    @model_validator(mode="after")
+    def distinct_logins(self):
+        if len({member.login_name for member in self.members}) != 4:
+            raise ValueError("Each participant needs a distinct login name")
+        return self
+
+
+class SetupStatus(Contract):
+    needed: bool

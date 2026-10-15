@@ -2,13 +2,16 @@
 
 Last updated: 2026-10-15.
 
-Current state: Authenticated idea capture works. A one-time CLI provisions four
-participants; the web app supports cookie login/logout, a shared workspace,
+Current state: Authenticated idea capture works. A first-run frontend wizard
+creates the workspace and four participant accounts and signs in the owner;
+the web app supports cookie login/logout, a shared workspace,
 attributed ideas, author-only versioned editing, and history. Membership, Origin,
-CSRF, session expiry, and stale edits are checked on the backend. The foundation
-has 32 tables, strict schemas, migrations, and pinned dependencies. 31 backend
-tests and five browser tests pass, as do typecheck, production build, and Ruff.
-Annotations, AI runs, proposal reviews/decisions, and GitHub publication remain
+CSRF, session expiry, and stale edits are checked on the backend. Whole-idea and
+passage comments now persist with attribution, source context, and version-aware
+highlights. Keyboard passage search provides an alternative to mouse selection.
+The foundation has 32 tables, strict schemas, migrations, and pinned dependencies.
+42 backend tests and eight browser tests pass, as do typecheck, production build,
+and Ruff. AI runs, proposal reviews/decisions, and GitHub publication remain
 unimplemented. The next milestone is a constrained,
 four-participant workflow from ideas and feedback to reviewed proposals, with a
 real ticketing integration. Course dates follow [project-requirements.pdf](project-requirements.pdf),
@@ -33,13 +36,11 @@ ticket imports and bidirectional status sync are deferred.
 
 ## Next steps
 
-1. Add whole-idea and anchored passage comments with author attribution and
-   immutable source-version references in section 3.
-2. Define the primary evaluation question and initial labeled cases in section 7
+1. Define the primary evaluation question and initial labeled cases in section 7
    before prompt tuning.
-3. Verify comment anchoring after idea edits and keyboard-accessible commenting
-   in section 3.
-4. Connect extraction and human correction in section 4, then two-candidate
+2. Select the team's model provider/access and implement structured preference
+   extraction with evidence checks in section 4.
+3. Add human preference confirmation/correction in section 4, then two-candidate
    synthesis in section 5.
 
 The user accepted the MVP and pilot rules on 2026-10-15. Stack and versioned data
@@ -186,6 +187,10 @@ and feasibility still need team review. November 22 is no longer a course deadli
 - [x] Implement controlled pilot identities and workspace membership checks on
   available reads/writes. Reject client-supplied actor IDs and cross-workspace
   access. Review-specific impersonation checks remain part of section 6.
+- [x] Provide first-run setup entirely in the frontend: decision question,
+  workspace name, four display names/logins/passwords, and password confirmations.
+  Validate duplicate logins and mismatches, create records atomically, sign in
+  the owner, and disable setup once accounts or a workspace exist.
 - [x] Verify a local round trip: a participant creates an idea, reloads the page,
   and retrieves the same attributed content from persistent storage.
 
@@ -196,23 +201,31 @@ Progress (2026-10-15): `backend/app/db/models.py` defines 32 tables;
 the complete product services. API returns readiness only after migration.
 Generated OpenAPI/boundary JSON and frontend types are source artifacts ready for version control.
 `uv.lock` and `package-lock.json` pin installed dependencies on Python 3.14.7/Node 24.10.0.
-Verified: 31 backend tests passed, including empty/populated migration rollback,
+Verified: 42 backend tests passed, including empty/populated migration rollback,
 every migrated foreign key, historical edit/delete rejection, stale edits,
 source ownership/manifest checks, and Unicode anchors. Ruff lint/format,
 `alembic check`, TypeScript checking, and Next.js production build passed.
-All five Playwright checks passed against real local servers, including four
+All eight Playwright checks passed against real local servers, including four
 independent participant sessions, attributed sharing, reload persistence, version
 history, author-only edit controls, logout, failed-save draft preservation, and
 simulated session expiry/API failure. Visually inspected the desktop Chromium
-workspace screenshot. Real pilot accounts are not provisioned automatically:
-run `uv run python -m app.seed` from `backend/` once; no default real credentials
-are shipped. Known test credentials are restricted to the isolated e2e seed.
+workspace screenshot. Real pilot accounts are created through the frontend
+wizard on an empty database; no terminal account setup or default real credentials
+are required. The CLI remains an optional headless alternative. Browser tests now
+start with a fresh migrated database and create their identities through the real
+wizard before running collaboration tests. API tests verify empty-state detection,
+setup validation, owner sessions, all four logins, repeat-setup rejection, and
+two concurrent setup attempts creating only one workspace. No accounts were
+created in the user's real database during verification.
 Documentation links resolve and `git diff --check` passes. Local runtime data,
 dependencies, screenshots, and credentials remain ignored.
 Known tooling warnings: Alembic's table-sort warning for intentional version/head
 cycles and Starlette's httpx test-client deprecation. Model calls, proposal reviews,
 and external GitHub actions remain unverified/unbuilt. No new migration was needed
-for login/idea routes; the existing schema supports this milestone.
+for login/idea/comment routes; the existing schema supports this milestone.
+The concurrent browser suite exposed a SQLite deferred lock-upgrade conflict:
+HTTP write transactions now reserve their write lock before reading. A dedicated
+simultaneous-sign-in regression and the browser suite pass with that fix.
 
 ## 3. Capture ideas and contextual feedback
 
@@ -220,21 +233,29 @@ for login/idea routes; the existing schema supports this milestone.
   ideas, and next action; avoid requiring separate full-featured screens.
 - [x] Support one-sentence ideas with optional titles and attribution. Editing
   creates a version while retaining the original contribution.
-- [ ] Support whole-idea comments and passage comments. For passages, persist
+- [x] Support whole-idea comments and passage comments. For passages, persist
   the quote, source version, offsets, and surrounding context; reload must show
   the correct source. After an edit, preserve the old-version anchor and clearly
   flag any unverified relocation to the current text.
-- [ ] Provide a keyboard-accessible way to comment on a passage or selected
+- [x] Provide a keyboard-accessible way to comment on a passage or selected
   section; commenting must not depend exclusively on mouse selection.
-- [ ] Verify with four pilot identities that comments remain attributed and
+- [x] Verify with four pilot identities that comments remain attributed and
   readable after reload and that an edit does not silently move feedback.
 
 Progress (2026-10-15): Authenticated capture/edit/history UI and API are implemented
 in `web/src/app/page.tsx` and `backend/app/api/routes.py`. Four-session browser
 checks verify sharing and persistence; API checks reject non-author edits, stale
 versions, cross-workspace IDs, actor spoofing, and invalid CSRF/Origin headers.
-Comments and annotation UI remain unbuilt. Use immutable source versions before
-attempting automatic re-anchoring across arbitrary edits.
+`backend/app/api/annotations.py` and `web/src/app/idea-discussion.tsx` add authenticated
+whole-idea and passage comments. All four identities are verified through the API;
+browser checks cover shared feedback, mouse selection of a repeated phrase,
+persisted highlights after reload, original context after edits, and keyboard-only
+passage search/submission after emoji and CRLF text. Invalid quotes, cross-idea
+versions, surrogate splits, and forged author IDs are rejected. Old comments stay
+on their exact source version and are explicitly labeled historical.
+The keyboard path searches exact text and lets users choose matching excerpts;
+native read-only textarea arrow selection was unreliable in Chromium on macOS.
+Comment edits, withdrawal, and automatic re-anchoring are not implemented.
 Threaded replies, quick reactions, and richer navigation are deferred below
 under the agreed scope decision in section 1.
 

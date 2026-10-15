@@ -5415,6 +5415,157 @@
       }
     ]
   },
+  "AnnotationView": {
+    "$defs": {
+      "Span": {
+        "additionalProperties": false,
+        "properties": {
+          "start_utf16": {
+            "minimum": 0,
+            "title": "Start Utf16",
+            "type": "integer"
+          },
+          "end_utf16": {
+            "exclusiveMinimum": 0,
+            "title": "End Utf16",
+            "type": "integer"
+          },
+          "quote": {
+            "maxLength": 20000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Quote",
+            "type": "string"
+          },
+          "prefix": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Prefix",
+            "type": "string"
+          },
+          "suffix": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Suffix",
+            "type": "string"
+          }
+        },
+        "required": [
+          "start_utf16",
+          "end_utf16",
+          "quote"
+        ],
+        "title": "Span",
+        "type": "object"
+      },
+      "UserView": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "display_name": {
+            "title": "Display Name",
+            "type": "string"
+          },
+          "login_name": {
+            "title": "Login Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "display_name",
+          "login_name"
+        ],
+        "title": "UserView",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "id": {
+        "format": "uuid",
+        "title": "Id",
+        "type": "string"
+      },
+      "version_id": {
+        "format": "uuid",
+        "title": "Version Id",
+        "type": "string"
+      },
+      "idea_id": {
+        "format": "uuid",
+        "title": "Idea Id",
+        "type": "string"
+      },
+      "idea_version_id": {
+        "format": "uuid",
+        "title": "Idea Version Id",
+        "type": "string"
+      },
+      "source_version": {
+        "title": "Source Version",
+        "type": "integer"
+      },
+      "source_body": {
+        "title": "Source Body",
+        "type": "string"
+      },
+      "historical": {
+        "title": "Historical",
+        "type": "boolean"
+      },
+      "anchor": {
+        "enum": [
+          "whole_idea",
+          "passage"
+        ],
+        "title": "Anchor",
+        "type": "string"
+      },
+      "span": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/Span"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "body": {
+        "title": "Body",
+        "type": "string"
+      },
+      "author": {
+        "$ref": "#/$defs/UserView"
+      },
+      "created_at": {
+        "format": "date-time",
+        "title": "Created At",
+        "type": "string"
+      }
+    },
+    "required": [
+      "id",
+      "version_id",
+      "idea_id",
+      "idea_version_id",
+      "source_version",
+      "source_body",
+      "historical",
+      "anchor",
+      "span",
+      "body",
+      "author",
+      "created_at"
+    ],
+    "title": "AnnotationView",
+    "type": "object"
+  },
   "LoginRequest": {
     "additionalProperties": false,
     "properties": {
@@ -5885,6 +6036,20 @@
       "members"
     ],
     "title": "PilotSetup",
+    "type": "object"
+  },
+  "SetupStatus": {
+    "additionalProperties": false,
+    "properties": {
+      "needed": {
+        "title": "Needed",
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "needed"
+    ],
+    "title": "SetupStatus",
     "type": "object"
   }
 }

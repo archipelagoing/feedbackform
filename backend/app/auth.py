@@ -4,11 +4,11 @@ import hashlib
 import hmac
 import os
 import secrets
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from typing import Annotated
 
-from fastapi import Depends, HTTPException, Request
-from sqlalchemy import select
+from fastapi import Depends, HTTPException, Request, Response
+from sqlalchemy import select, update
 from sqlalchemy.orm import Session
 
 from app.db import models as m
@@ -57,8 +57,40 @@ def secure_cookies() -> bool:
     return os.environ.get("FEEDBACKFORM_SECURE_COOKIES", "0") == "1"
 
 
+def start_session(
+    db: Session, user_id: str, response: Response, old_cookie: str | None = None
+) -> str:
+    if old_cookie:
+        db.execute(
+            update(m.Session)
+            .where(m.Session.token_hash == token_hash(old_cookie))
+            .values(revoked_at=datetime.now(UTC))
+        )
+    raw = secrets.token_urlsafe(32)
+    db.add(
+        m.Session(
+            user_id=user_id,
+            token_hash=token_hash(raw),
+            expires_at=datetime.now(UTC) + timedelta(seconds=SESSION_SECONDS),
+        )
+    )
+    response.set_cookie(
+        COOKIE_NAME,
+        raw,
+        httponly=True,
+        secure=secure_cookies(),
+        samesite="strict",
+        max_age=SESSION_SECONDS,
+        path="/api",
+    )
+    return raw
+
+
 def get_db(request: Request):
-    with Session(request.app.state.engine) as session:
+    engine = request.app.state.engine.execution_options(
+        sqlite_write=request.method in {"POST", "PATCH", "PUT", "DELETE"}
+    )
+    with Session(engine) as session:
         try:
             yield session
             session.commit()
