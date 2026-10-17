@@ -8,6 +8,12 @@ creation/versioned editing, and history are exposed; session and workspace-view
 boundaries are in `backend/app/api/workspace_schemas.py`. Whole-idea and passage
 annotation creation/listing are implemented in `backend/app/api/annotations.py`.
 Comment edit/withdrawal and later feature transitions remain unimplemented.
+Preference extraction/review routes now snapshot current inputs, validate original
+evidence and participant attribution, and append inferred or human-authored
+preference revisions. `backend/app/api/preferences.py` owns these transitions;
+the OpenAI wire schema is in `backend/app/domain/extraction.py`. Subsequent runs
+receive the latest correction/withdrawal heads. Invalid or stale results roll
+back atomically; the snapshot and failed run remain available for audit.
 The initial workspace and four identities can be provisioned through the frontend
 using the validated `PilotSetup` command; this is disabled once any account or
 workspace exists. It commits all records and the owner's session atomically.

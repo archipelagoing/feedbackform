@@ -514,6 +514,210 @@
         }
       }
     },
+    "/api/workspaces/{workspace_id}/preferences": {
+      "get": {
+        "summary": "Board",
+        "operationId": "board_api_workspaces__workspace_id__preferences_get",
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Workspace Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PreferenceBoard"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/workspaces/{workspace_id}/preferences/{preference_id}/history": {
+      "get": {
+        "summary": "History",
+        "operationId": "history_api_workspaces__workspace_id__preferences__preference_id__history_get",
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "name": "preference_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Preference Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PreferenceView"
+                  },
+                  "title": "Response History Api Workspaces  Workspace Id  Preferences  Preference Id  History Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/workspaces/{workspace_id}/preferences/{preference_id}": {
+      "patch": {
+        "summary": "Review",
+        "operationId": "review_api_workspaces__workspace_id__preferences__preference_id__patch",
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Workspace Id"
+            }
+          },
+          {
+            "name": "preference_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Preference Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PreferenceCorrection"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PreferenceView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/workspaces/{workspace_id}/preference-extractions": {
+      "post": {
+        "summary": "Extract",
+        "operationId": "extract_api_workspaces__workspace_id__preference_extractions_post",
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Workspace Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExtractionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExtractionRunView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/health": {
       "get": {
         "summary": "Health",
@@ -677,6 +881,53 @@
           "csrf_token"
         ],
         "title": "AuthView"
+      },
+      "ExtractionRequest": {
+        "properties": {
+          "request_key": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Request Key"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "request_key"
+        ],
+        "title": "ExtractionRequest"
+      },
+      "ExtractionRunView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "error_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Code"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "status",
+          "error_code"
+        ],
+        "title": "ExtractionRunView"
       },
       "HTTPValidationError": {
         "properties": {
@@ -1014,6 +1265,219 @@
           "members"
         ],
         "title": "PilotSetup"
+      },
+      "PreferenceBoard": {
+        "properties": {
+          "configured": {
+            "type": "boolean",
+            "title": "Configured"
+          },
+          "latest_run": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ExtractionRunView"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "preferences": {
+            "items": {
+              "$ref": "#/components/schemas/PreferenceView"
+            },
+            "type": "array",
+            "title": "Preferences"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "configured",
+          "latest_run",
+          "preferences"
+        ],
+        "title": "PreferenceBoard"
+      },
+      "PreferenceCorrection": {
+        "properties": {
+          "expected_revision_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Expected Revision Id"
+          },
+          "statement": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Statement"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "desire",
+              "concern",
+              "constraint",
+              "question",
+              "suggestion"
+            ],
+            "title": "Kind"
+          },
+          "strength": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "nice_to_have",
+                  "important",
+                  "essential"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Strength"
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "confirm",
+              "correct",
+              "withdraw"
+            ],
+            "title": "Action"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "expected_revision_id",
+          "statement",
+          "kind",
+          "action"
+        ],
+        "title": "PreferenceCorrection"
+      },
+      "PreferenceSourceView": {
+        "properties": {
+          "version_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Version Id"
+          },
+          "kind": {
+            "type": "string",
+            "title": "Kind"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "quote": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quote"
+          },
+          "historical": {
+            "type": "boolean",
+            "title": "Historical"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "version_id",
+          "kind",
+          "text",
+          "quote",
+          "historical"
+        ],
+        "title": "PreferenceSourceView"
+      },
+      "PreferenceView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "revision_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Revision Id"
+          },
+          "version": {
+            "type": "integer",
+            "title": "Version"
+          },
+          "participant": {
+            "$ref": "#/components/schemas/UserView"
+          },
+          "statement": {
+            "type": "string",
+            "title": "Statement"
+          },
+          "kind": {
+            "type": "string",
+            "title": "Kind"
+          },
+          "strength": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Strength"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "uncertainty_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Uncertainty Note"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/PreferenceSourceView"
+            },
+            "type": "array",
+            "title": "Sources"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "revision_id",
+          "version",
+          "participant",
+          "statement",
+          "kind",
+          "strength",
+          "status",
+          "uncertainty_note",
+          "sources"
+        ],
+        "title": "PreferenceView"
       },
       "SetupStatus": {
         "properties": {

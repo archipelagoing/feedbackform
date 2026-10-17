@@ -5,7 +5,7 @@ from pathlib import Path
 
 from pydantic import TypeAdapter
 
-from app.api import schemas, workspace_schemas
+from app.api import preferences, schemas, workspace_schemas
 from app.main import create_app
 
 root = Path(__file__).resolve().parents[1]
@@ -19,7 +19,8 @@ contracts["WorkflowEnvelope"] = TypeAdapter(schemas.WorkflowEnvelope).json_schem
 contracts.update(
     {
         name: cls.model_json_schema()
-        for name, cls in vars(workspace_schemas).items()
+        for module in (workspace_schemas, preferences)
+        for name, cls in vars(module).items()
         if isinstance(cls, type)
         and issubclass(cls, schemas.Contract)
         and cls is not schemas.Contract

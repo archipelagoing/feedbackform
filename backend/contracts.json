@@ -6051,5 +6051,536 @@
     ],
     "title": "SetupStatus",
     "type": "object"
+  },
+  "ExtractionOutput": {
+    "$defs": {
+      "Signal": {
+        "additionalProperties": false,
+        "properties": {
+          "source_id": {
+            "maxLength": 36,
+            "minLength": 1,
+            "title": "Source Id",
+            "type": "string"
+          },
+          "participant_id": {
+            "maxLength": 36,
+            "minLength": 1,
+            "title": "Participant Id",
+            "type": "string"
+          },
+          "statement": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Statement",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "desire",
+              "concern",
+              "constraint",
+              "question",
+              "suggestion"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "quote": {
+            "maxLength": 20000,
+            "minLength": 1,
+            "title": "Quote",
+            "type": "string"
+          },
+          "uncertainty_note": {
+            "anyOf": [
+              {
+                "maxLength": 2000,
+                "minLength": 1,
+                "pattern": "\\S",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Uncertainty Note"
+          }
+        },
+        "required": [
+          "source_id",
+          "participant_id",
+          "statement",
+          "kind",
+          "quote",
+          "uncertainty_note"
+        ],
+        "title": "Signal",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "preferences": {
+        "items": {
+          "$ref": "#/$defs/Signal"
+        },
+        "maxItems": 100,
+        "title": "Preferences",
+        "type": "array"
+      }
+    },
+    "required": [
+      "preferences"
+    ],
+    "title": "ExtractionOutput",
+    "type": "object"
+  },
+  "ExtractionRequest": {
+    "additionalProperties": false,
+    "properties": {
+      "request_key": {
+        "format": "uuid",
+        "title": "Request Key",
+        "type": "string"
+      }
+    },
+    "required": [
+      "request_key"
+    ],
+    "title": "ExtractionRequest",
+    "type": "object"
+  },
+  "ExtractionRunView": {
+    "additionalProperties": false,
+    "properties": {
+      "id": {
+        "format": "uuid",
+        "title": "Id",
+        "type": "string"
+      },
+      "status": {
+        "title": "Status",
+        "type": "string"
+      },
+      "error_code": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Error Code"
+      }
+    },
+    "required": [
+      "id",
+      "status",
+      "error_code"
+    ],
+    "title": "ExtractionRunView",
+    "type": "object"
+  },
+  "PreferenceSourceView": {
+    "additionalProperties": false,
+    "properties": {
+      "version_id": {
+        "format": "uuid",
+        "title": "Version Id",
+        "type": "string"
+      },
+      "kind": {
+        "title": "Kind",
+        "type": "string"
+      },
+      "text": {
+        "title": "Text",
+        "type": "string"
+      },
+      "quote": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Quote"
+      },
+      "historical": {
+        "title": "Historical",
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "version_id",
+      "kind",
+      "text",
+      "quote",
+      "historical"
+    ],
+    "title": "PreferenceSourceView",
+    "type": "object"
+  },
+  "PreferenceView": {
+    "$defs": {
+      "PreferenceSourceView": {
+        "additionalProperties": false,
+        "properties": {
+          "version_id": {
+            "format": "uuid",
+            "title": "Version Id",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          },
+          "quote": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quote"
+          },
+          "historical": {
+            "title": "Historical",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "version_id",
+          "kind",
+          "text",
+          "quote",
+          "historical"
+        ],
+        "title": "PreferenceSourceView",
+        "type": "object"
+      },
+      "UserView": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "display_name": {
+            "title": "Display Name",
+            "type": "string"
+          },
+          "login_name": {
+            "title": "Login Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "display_name",
+          "login_name"
+        ],
+        "title": "UserView",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "id": {
+        "format": "uuid",
+        "title": "Id",
+        "type": "string"
+      },
+      "revision_id": {
+        "format": "uuid",
+        "title": "Revision Id",
+        "type": "string"
+      },
+      "version": {
+        "title": "Version",
+        "type": "integer"
+      },
+      "participant": {
+        "$ref": "#/$defs/UserView"
+      },
+      "statement": {
+        "title": "Statement",
+        "type": "string"
+      },
+      "kind": {
+        "title": "Kind",
+        "type": "string"
+      },
+      "strength": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Strength"
+      },
+      "status": {
+        "title": "Status",
+        "type": "string"
+      },
+      "uncertainty_note": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Uncertainty Note"
+      },
+      "sources": {
+        "items": {
+          "$ref": "#/$defs/PreferenceSourceView"
+        },
+        "title": "Sources",
+        "type": "array"
+      }
+    },
+    "required": [
+      "id",
+      "revision_id",
+      "version",
+      "participant",
+      "statement",
+      "kind",
+      "strength",
+      "status",
+      "uncertainty_note",
+      "sources"
+    ],
+    "title": "PreferenceView",
+    "type": "object"
+  },
+  "PreferenceBoard": {
+    "$defs": {
+      "ExtractionRunView": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "error_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Code"
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "error_code"
+        ],
+        "title": "ExtractionRunView",
+        "type": "object"
+      },
+      "PreferenceSourceView": {
+        "additionalProperties": false,
+        "properties": {
+          "version_id": {
+            "format": "uuid",
+            "title": "Version Id",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          },
+          "quote": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quote"
+          },
+          "historical": {
+            "title": "Historical",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "version_id",
+          "kind",
+          "text",
+          "quote",
+          "historical"
+        ],
+        "title": "PreferenceSourceView",
+        "type": "object"
+      },
+      "PreferenceView": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "revision_id": {
+            "format": "uuid",
+            "title": "Revision Id",
+            "type": "string"
+          },
+          "version": {
+            "title": "Version",
+            "type": "integer"
+          },
+          "participant": {
+            "$ref": "#/$defs/UserView"
+          },
+          "statement": {
+            "title": "Statement",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "strength": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Strength"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "uncertainty_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Uncertainty Note"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/$defs/PreferenceSourceView"
+            },
+            "title": "Sources",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "revision_id",
+          "version",
+          "participant",
+          "statement",
+          "kind",
+          "strength",
+          "status",
+          "uncertainty_note",
+          "sources"
+        ],
+        "title": "PreferenceView",
+        "type": "object"
+      },
+      "UserView": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "display_name": {
+            "title": "Display Name",
+            "type": "string"
+          },
+          "login_name": {
+            "title": "Login Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "display_name",
+          "login_name"
+        ],
+        "title": "UserView",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "configured": {
+        "title": "Configured",
+        "type": "boolean"
+      },
+      "latest_run": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/ExtractionRunView"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "preferences": {
+        "items": {
+          "$ref": "#/$defs/PreferenceView"
+        },
+        "title": "Preferences",
+        "type": "array"
+      }
+    },
+    "required": [
+      "configured",
+      "latest_run",
+      "preferences"
+    ],
+    "title": "PreferenceBoard",
+    "type": "object"
   }
 }

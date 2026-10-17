@@ -6,15 +6,18 @@ from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ConfigDict
-from sqlalchemy import text
+from sqlalchemy import text, update
 from sqlalchemy.exc import SQLAlchemyError
 
 from app.api.annotations import router as annotation_router
+from app.api.preferences import router as preference_router
 from app.api.routes import router
 from app.api.setup import router as setup_router
 from app.auth import hash_password
 from app.config import database_url
+from app.db import models as m
 from app.db.connection import build_engine
+from app.domain.extraction import OpenAIExtractor
 from app.domain.login_limits import LoginLimiter
 
 EXPECTED_REVISION = "0001_foundation"
@@ -27,7 +30,9 @@ class HealthResponse(BaseModel):
     schema_revision: str | None
 
 
-def create_app(url: str | None = None, allowed_origins: set[str] | None = None) -> FastAPI:
+def create_app(
+    url: str | None = None, allowed_origins: set[str] | None = None, extractor=None
+) -> FastAPI:
     @asynccontextmanager
     async def lifespan(app: FastAPI):
         app.state.engine = build_engine(url or database_url())
@@ -44,6 +49,17 @@ def create_app(url: str | None = None, allowed_origins: set[str] | None = None) 
         )
         app.state.dummy_password_hash = hash_password(secrets.token_urlsafe(32))
         app.state.login_limiter = LoginLimiter()
+        app.state.extractor = extractor if extractor is not None else OpenAIExtractor()
+        # Local pilot runs one API process; interrupted jobs must not block all retries.
+        try:
+            with app.state.engine.begin() as connection:
+                connection.execute(
+                    update(m.AgentRun)
+                    .where(m.AgentRun.status.in_(["queued", "running"]))
+                    .values(status="failed", error_code="interrupted")
+                )
+        except SQLAlchemyError:
+            pass  # Readiness reports missing migrations; startup must still serve health.
         yield
         app.state.engine.dispose()
 
@@ -51,6 +67,7 @@ def create_app(url: str | None = None, allowed_origins: set[str] | None = None) 
     app.include_router(router)
     app.include_router(annotation_router)
     app.include_router(setup_router)
+    app.include_router(preference_router)
 
     @app.middleware("http")
     async def private_responses(request, call_next):

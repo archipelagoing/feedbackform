@@ -19,8 +19,15 @@ test("mouse passage and whole-idea comments persist with attribution after edits
   await stable.locator(".discussion > .idea-body").scrollIntoViewIfNeeded();
   // Use a real mouse drag over a DOM Range's measured word bounds.
   const box = await stable.locator(".discussion > .idea-body").evaluate(node => {
-    const text = node.firstChild!;
-    const start = node.textContent!.lastIndexOf("repeat");
+    const walker = document.createTreeWalker(node, NodeFilter.SHOW_TEXT);
+    let text: Text | null = null;
+    let start = -1;
+    while (walker.nextNode()) {
+      const candidate = walker.currentNode as Text;
+      const index = candidate.data.lastIndexOf("repeat");
+      if (index !== -1) { text = candidate; start = index; }
+    }
+    if (!text) throw new Error("Passage not found");
     const range = document.createRange(); range.setStart(text, start); range.setEnd(text, start + 6);
     const box = range.getBoundingClientRect();
     return { x: box.x, y: box.y, width: box.width, height: box.height };

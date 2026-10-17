@@ -9,12 +9,13 @@ export default defineConfig({
   retries: 0,
   projects: [
     { name: "setup", testMatch: /onboarding\.setup\.ts/ },
-    { name: "chromium", testMatch: /.*\.spec\.ts/, dependencies: ["setup"] },
+    { name: "chromium", testMatch: /.*\.spec\.ts/, testIgnore: /preferences\.spec\.ts/, dependencies: ["setup"] },
+    { name: "preferences", testMatch: /preferences\.spec\.ts/, dependencies: ["chromium"] },
   ],
   use: { baseURL: "http://127.0.0.1:3100", browserName: "chromium" },
   webServer: [
     {
-      command: "cd ../backend && .venv/bin/alembic upgrade head && .venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 18080",
+      command: "cd ../backend && .venv/bin/alembic upgrade head && .venv/bin/uvicorn tests.e2e_app:app --host 127.0.0.1 --port 18080",
       env: { FEEDBACKFORM_DATABASE_URL: databaseUrl, FEEDBACKFORM_ALLOWED_ORIGINS: "http://127.0.0.1:3100", FEEDBACKFORM_SECURE_COOKIES: "0" },
       url: "http://127.0.0.1:18080/api/health",
       reuseExistingServer: false,

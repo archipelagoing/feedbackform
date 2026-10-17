@@ -10,9 +10,12 @@ CSRF, session expiry, and stale edits are checked on the backend. Whole-idea and
 passage comments now persist with attribution, source context, and version-aware
 highlights. Keyboard passage search provides an alternative to mouse selection.
 The foundation has 32 tables, strict schemas, migrations, and pinned dependencies.
-42 backend tests and eight browser tests pass, as do typecheck, production build,
-and Ruff. AI runs, proposal reviews/decisions, and GitHub publication remain
-unimplemented. The next milestone is a constrained,
+59 backend tests and thirteen browser tests pass, as do typecheck, production build,
+and Ruff. OpenAI extraction jobs, input snapshots, and participant-owned
+confirmation/correction/withdrawal now work with explicit test-provider coverage.
+Live extraction needs server-side credentials and model selection; semantic
+quality has not been measured. Group summaries, proposal reviews/decisions, and
+GitHub publication remain unimplemented. The next milestone is a constrained,
 four-participant workflow from ideas and feedback to reviewed proposals, with a
 real ticketing integration. Course dates follow [project-requirements.pdf](project-requirements.pdf),
 per the user's clarification: proposal November 12, final presentation December 3,
@@ -36,12 +39,12 @@ ticket imports and bidirectional status sync are deferred.
 
 ## Next steps
 
-1. Define the primary evaluation question and initial labeled cases in section 7
-   before prompt tuning.
-2. Select the team's model provider/access and implement structured preference
-   extraction with evidence checks in section 4.
-3. Add human preference confirmation/correction in section 4, then two-candidate
-   synthesis in section 5.
+1. Configure server-side OpenAI access and an available model, verify a live
+   extraction, and have teammates review the initial synthetic labels and agree
+   the primary evaluation question/quality targets before prompt tuning.
+2. Generate the evidence-linked group summary in section 4 using the latest
+   corrected interpretation heads and retaining minority concerns.
+3. Implement two-candidate synthesis and constraint critique in section 5.
 
 The user accepted the MVP and pilot rules on 2026-10-15. Stack and versioned data
 contracts are now defined in `docs/architecture.md` and `docs/data-model.md`.
@@ -241,6 +244,13 @@ simultaneous-sign-in regression and the browser suite pass with that fix.
   section; commenting must not depend exclusively on mouse selection.
 - [x] Verify with four pilot identities that comments remain attributed and
   readable after reload and that an edit does not silently move feedback.
+- [x] Import AI-generated Markdown through the frontend with a downloadable
+  template, editable preview, participant review confirmation, and extraction
+  through the existing versioned idea/evidence flow. Preserve unfamiliar sections
+  as source text; do not execute embedded HTML or accept document-supplied actors.
+- [x] Render Markdown in idea cards, comments, and idea history, including
+  headings, lists, emphasis, code, and tables. Retain a source-view toggle and
+  source-position mapping for passage comments; keep raw HTML inert.
 
 Progress (2026-10-15): Authenticated capture/edit/history UI and API are implemented
 in `web/src/app/page.tsx` and `backend/app/api/routes.py`. Four-session browser
@@ -256,28 +266,60 @@ on their exact source version and are explicitly labeled historical.
 The keyboard path searches exact text and lets users choose matching excerpts;
 native read-only textarea arrow selection was unreliable in Chromium on macOS.
 Comment edits, withdrawal, and automatic re-anchoring are not implemented.
+Markdown import now reads UTF-8 `.md`/`.markdown` files locally for review, then
+saves the reviewed text as the signed-in participant's idea through the existing
+API. Limits are 80,000 bytes and 20,000 browser text characters. A recommended
+format and AI prompt are documented in `docs/markdown-import.md`; the downloadable
+template is `web/public/templates/idea-template.md`. Import does not call OpenAI;
+the ordinary extraction action consumes the saved source version afterward.
+Two browser checks verify template download, preview/review gating, preservation
+of Markdown/emoji/CRLF after reload, failed-save recovery, extraction evidence,
+HTML remaining inert, and extension/encoding/size validation. All twelve browser
+checks, the production build, and TypeScript checking pass for this milestone.
+The subsequent Markdown rendering milestone adds a shared AST renderer in
+`web/src/app/markdown.tsx`, safe clickable links, table styles, and an original-source
+toggle. A browser regression verifies selection after emoji/CRLF and bold syntax,
+the persisted original offsets, reload highlights, source switching, and blocked
+active content. Existing mouse/keyboard annotation checks still pass. All thirteen
+browser checks pass with the renderer; original Markdown in the database and
+extraction inputs remains unchanged.
 Threaded replies, quick reactions, and richer navigation are deferred below
 under the agreed scope decision in section 1.
 
 ## 4. Extract preferences and support correction
 
-- [ ] Implement structured extraction with source spans and participant IDs;
-  preserve negation, conditions, uncertainty, and multiple signals in a comment.
-- [ ] Build a review view where each participant can confirm, correct, or
+- [x] Implement structured extraction with source spans and participant IDs.
+  The prompt requests preservation of negation, conditions, uncertainty, and
+  multiple signals; live semantic quality still needs evaluation below.
+- [x] Build a review view where each participant can confirm, correct, or
   withdraw their own inferred preferences without rewriting the original comment.
-- [ ] Ensure corrected and withdrawn interpretations supersede earlier versions
+- [x] Ensure corrected and withdrawn interpretations supersede earlier versions
   in subsequent runs; unconfirmed inferences must not become binding constraints.
 - [ ] Generate an evidence-linked summary of shared priorities, distinctive
   interests, tensions, and unanswered questions. Do not infer human endorsement
   from semantic overlap.
-- [ ] Validate structured outputs and references before persistence. Invalid
+- [x] Validate structured outputs and references before persistence. Invalid
   IDs, absent sources, and attribution to the wrong participant must be rejected
   or flagged rather than displayed as verified facts.
-- [ ] Verify correction behavior with a fixture: correct an intentionally wrong
+- [x] Verify correction behavior with a fixture: correct an intentionally wrong
   extraction and demonstrate that the next analysis uses the correction.
 
-Progress: No extraction or correction workflow exists. Section 2's source and
-preference contracts and section 3's persisted feedback are prerequisites.
+Progress (2026-10-15): OpenAI Responses integration, immutable snapshots, background
+extraction, exact source/quote/owner checks, and participant review/history are
+implemented in `backend/app/api/preferences.py`, `backend/app/domain/extraction.py`,
+and `web/src/app/preference-board.tsx`. The panel appears above Shared ideas and
+explains missing OpenAI configuration. Server-side API key and explicit model
+selection are required for live extraction. No SDK dependency was installed.
+Latest correction/withdrawal heads enter subsequent extraction context; previously
+processed source versions are skipped, and edits during a call invalidate its
+output. Group summaries remain unimplemented. Twelve synthetic development and
+reserved cases plus an opt-in evaluation runner are in `backend/evaluation/` and
+`backend/scripts/evaluate_preferences.py`; no live quality results are claimed.
+The 17 new backend checks and two new browser checks pass, including an intentionally
+wrong draft corrected in the frontend and next-run correction context in API tests.
+OpenAI credentials were not available, so live provider/model compatibility and
+semantic extraction quality remain unverified. Model calls use the standard HTTP
+library after SDK dependency installation was declined.
 
 ## 5. Generate alternatives with accountable critique
 
@@ -377,9 +419,11 @@ product behavior; they do not authorize posting to an unspecified destination.
   Resolve defects that lose work, misattribute feedback, or fabricate approval,
   and rerun affected checks before declaring the pilot ready.
 
-Progress: No dataset, benchmark, tests, or pilot results exist. Start dataset
-design alongside section 2; do not wait until the UI is complete. Four-person
-pilot feedback alone will not establish broad effectiveness.
+Progress (2026-10-15): Twelve initial synthetic extraction examples, a development/
+reserved split, manual meaning labels, and an opt-in live prediction runner now
+exist in `backend/evaluation/`. Dataset validation passes. Structural diagnostics
+are explicitly separated from semantic adjudication; no live benchmark or pilot
+results exist. Four-person pilot feedback alone will not establish broad effectiveness.
 
 ## 8. Prepare the demonstration and handoff
 
@@ -455,7 +499,7 @@ the active sections only after the core flow works and scope is explicitly expan
   mandatory model training/fine-tuning, not as confirmation of submission or
   deployment requirements.
 - **Open decisions:** Remaining course requirements, test repository/access,
-  model provider/access, evaluation target, and delivery setting
+  model credentials/model selection, evaluation target, and delivery setting
   are tracked in the relevant sections above.
 - **MVP and policy acceptance — 2026-10-15:** The user accepted the proposed
   first-release boundaries, workspace-owner decision recording, all-four binding
@@ -463,6 +507,11 @@ the active sections only after the core flow works and scope is explicitly expan
 - **Technical selection — 2026-10-15:** Next.js/TypeScript UI, FastAPI/Pydantic API,
   SQLite with SQLAlchemy and Alembic, explicit Python orchestration, server-side
   GitHub REST integration. See `docs/architecture.md` and `docs/data-model.md`.
+- **Model provider — 2026-10-15:** User selected OpenAI. API key and model are
+  configured on the server; neither live access nor model quality has been verified.
+- **Hackathon assessment — 2026-10-15:** Added `aws-opencv-adaptation.md` for the
+  confirmed OpenCV AI Competition 2026 link. Handwriting is not required; a useful
+  OpenCV 5 vision capability and meaningful AWS execution would be new scope.
 - **Planning decision — 2026-10-15:** Create this checklist from the product bible
   using the simple template. No separate FAQ is needed for the current milestone.
 - **Dependency:** Later implementation depends on the contracts and policy

@@ -1,10 +1,14 @@
 "use client";
 
+import { PreferenceBoard } from "./preference-board";
+
 import { FormEvent, useEffect, useState } from "react";
 import type { components } from "@/lib/api.generated";
 import { api, ApiError } from "@/lib/api";
 import IdeaDiscussion from "./idea-discussion";
 import SetupForm from "./setup-form";
+import MarkdownImport from "./markdown-import";
+import Markdown from "./markdown";
 
 type Auth = components["schemas"]["AuthView"];
 type Workspace = components["schemas"]["WorkspaceView"];
@@ -55,6 +59,7 @@ function IdeaCard({ idea, own, csrf, onRefresh, onAuthError }: {
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
   const [history, setHistory] = useState<History[] | null>(null);
+  const titleInMarkdown = idea.title && idea.body.split(/\r?\n/, 1)[0].trim() === `# ${idea.title}`;
   async function save(event: FormEvent) {
     event.preventDefault(); setPending(true); setError("");
     try {
@@ -86,7 +91,7 @@ function IdeaCard({ idea, own, csrf, onRefresh, onAuthError }: {
           setEditing(false); setError(""); void onRefresh();
         }}>Cancel edit</button></div>
     </form> : <>
-      {idea.title && <h3>{idea.title}</h3>}
+      {idea.title && !titleInMarkdown && <h3>{idea.title}</h3>}
       <IdeaDiscussion idea={idea} csrf={csrf} onAuthError={onAuthError} />
       <div className="actions">
         {own && <button className="secondary" disabled={pending} onClick={() => {
@@ -101,7 +106,7 @@ function IdeaCard({ idea, own, csrf, onRefresh, onAuthError }: {
     {error && <p className="error" role="alert">{error}</p>}
     {history && <div className="history"><h4>Version history</h4>{history.map(version =>
       <div key={version.version_id}><strong>Version {version.version}{version.title ? ` · ${version.title}` : ""}</strong>
-        <p className="idea-body">{version.body}</p></div>)}</div>}
+        <div className="idea-body"><Markdown body={version.body} /></div></div>)}</div>}
   </article>;
 }
 
@@ -147,6 +152,7 @@ function WorkspacePanel({ workspace, auth, onAuthError }: {
     <p className="intro">{workspace.goal}</p>
     <ul className="members" aria-label="Workspace participants">{workspace.members.map(member =>
       <li key={member.user.id}>{member.user.display_name}{member.role === "owner" && <span> · owner</span>}</li>)}</ul>
+    <PreferenceBoard workspaceId={workspace.id} auth={auth} onAuthError={onAuthError} />
     <div className="workspace-grid"><div>
       <div className="feed-header"><h2>Shared ideas</h2><button className="text-button" onClick={() => void refresh()}>Refresh ideas</button></div>
       {loading && <p role="status">Loading ideas…</p>}
@@ -163,7 +169,8 @@ function WorkspacePanel({ workspace, auth, onAuthError }: {
         value={body} onChange={e => setBody(e.target.value)} />
       <button disabled={pending || !body.trim()}>{pending ? "Saving…" : "Share idea"}</button>
       {notice && <p className="notice" role="status">{notice}</p>}
-    </form></aside></div>
+    </form><MarkdownImport workspaceId={workspace.id} auth={auth}
+      onImported={refresh} onAuthError={onAuthError} /></aside></div>
     {error && <p className="error" role="alert">{error}</p>}
   </section>;
 }
@@ -204,7 +211,7 @@ export default function Home() {
   }
   const workspace = workspaces.find(row => row.id === selected);
   return <main>
-    <header><span className="mark" aria-hidden="true">ff</span><span>FeedbackForm</span>
+    <header><span className="mark" aria-hidden="true"><img src="/lightbulb.svg" width={28} height={28} alt="" /></span><span>FeedbackForm</span>
       {auth ? <div className="account"><span>{auth.user.display_name}</span><button className="secondary" onClick={() => void logout()}>Sign out</button></div>
         : <span className="tag">Team pilot</span>}</header>
     {error && <p className="error" role="alert">{error}</p>}

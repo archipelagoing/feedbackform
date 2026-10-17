@@ -3,6 +3,7 @@
 import { FormEvent, ReactNode, useEffect, useRef, useState } from "react";
 import type { components } from "@/lib/api.generated";
 import { api } from "@/lib/api";
+import Markdown, { selectionSourceOffset } from "./markdown";
 
 type Idea = components["schemas"]["IdeaView"];
 type Comment = components["schemas"]["AnnotationView"];
@@ -51,7 +52,8 @@ export default function IdeaDiscussion({ idea, csrf, onAuthError }: {
   const [pending, setPending] = useState(false);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(false);
-  const source = useRef<HTMLParagraphElement>(null);
+  const [sourceView, setSourceView] = useState(false);
+  const source = useRef<HTMLDivElement>(null);
   const composer = useRef<HTMLTextAreaElement>(null);
   const keyboardSource = useRef<HTMLTextAreaElement>(null);
   const path = `/workspaces/${idea.workspace_id}/ideas/${idea.id}/annotations`;
@@ -93,11 +95,9 @@ export default function IdeaDiscussion({ idea, csrf, onAuthError }: {
     if (!root || !range || range.rangeCount !== 1 || range.isCollapsed) return;
     const selectedRange = range.getRangeAt(0);
     if (!root.contains(selectedRange.startContainer) || !root.contains(selectedRange.endContainer)) return;
-    const prefix = selectedRange.cloneRange();
-    prefix.selectNodeContents(root);
-    prefix.setEnd(selectedRange.startContainer, selectedRange.startOffset);
-    const start = prefix.toString().length;
-    setSelection(selectionTarget(start, start + selectedRange.toString().length));
+    const start = selectionSourceOffset(root, selectedRange.startContainer, selectedRange.startOffset);
+    const end = selectionSourceOffset(root, selectedRange.endContainer, selectedRange.endOffset);
+    setSelection(start !== null && end !== null ? selectionTarget(start, end) : null);
   }
   function startComment(next: Target) {
     setTarget(next); setOpen(true); setError(""); setNotice("");
@@ -119,11 +119,13 @@ export default function IdeaDiscussion({ idea, csrf, onAuthError }: {
     } finally { setPending(false); }
   }
   return <div className="discussion">
-    <p className="idea-body" ref={source} onMouseUp={captureSelection} onKeyUp={captureSelection}>
-      {markedText(idea.body, comments.filter(comment => comment.idea_version_id === idea.version_id && comment.span)
-        .map(comment => comment.span!))}
-    </p>
+    <div className="idea-body" ref={source} onMouseUp={captureSelection} onKeyUp={captureSelection}>
+      <Markdown body={idea.body} raw={sourceView} ranges={comments.filter(comment =>
+        comment.idea_version_id === idea.version_id && comment.span).map(comment => comment.span!)} />
+    </div>
     <div className="actions discussion-actions">
+      <button className="text-button" onClick={() => { setSourceView(!sourceView); setSelection(null); }}>
+        {sourceView ? "Show formatted Markdown" : "Show Markdown source"}</button>
       <button className="text-button" aria-label="Comments" aria-expanded={open}
         aria-controls={`comments-${idea.id}`} onClick={() => setOpen(!open)}>Comments · {comments.length}{hasMore ? "+" : ""}</button>
       <button className="text-button" onClick={() => startComment({ sourceId: idea.version_id,
@@ -157,7 +159,7 @@ export default function IdeaDiscussion({ idea, csrf, onAuthError }: {
           <time dateTime={comment.created_at}>{new Date(comment.created_at).toLocaleString()}</time></div>
         <p className="source-label">On version {comment.source_version}{comment.idea_version_id !== idea.version_id ? " · earlier version" : " · current version"}</p>
         {comment.span && <blockquote>{comment.span.quote}</blockquote>}
-        <p className="idea-body">{comment.body}</p>
+        <div className="idea-body"><Markdown body={comment.body} /></div>
         <details><summary>View version {comment.source_version} context</summary>
           <p className="idea-body">{markedText(comment.source_body, comment.span ? [comment.span] : [])}</p></details>
       </li>)}</ol>

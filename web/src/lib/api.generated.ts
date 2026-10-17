@@ -176,6 +176,74 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/workspaces/{workspace_id}/preferences": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Board */
+        get: operations["board_api_workspaces__workspace_id__preferences_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/workspaces/{workspace_id}/preferences/{preference_id}/history": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** History */
+        get: operations["history_api_workspaces__workspace_id__preferences__preference_id__history_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/workspaces/{workspace_id}/preferences/{preference_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Review */
+        patch: operations["review_api_workspaces__workspace_id__preferences__preference_id__patch"];
+        trace?: never;
+    };
+    "/api/workspaces/{workspace_id}/preference-extractions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Extract */
+        post: operations["extract_api_workspaces__workspace_id__preference_extractions_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/health": {
         parameters: {
             query?: never;
@@ -261,6 +329,26 @@ export interface components {
             user: components["schemas"]["UserView"];
             /** Csrf Token */
             csrf_token: string;
+        };
+        /** ExtractionRequest */
+        ExtractionRequest: {
+            /**
+             * Request Key
+             * Format: uuid
+             */
+            request_key: string;
+        };
+        /** ExtractionRunView */
+        ExtractionRunView: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Status */
+            status: string;
+            /** Error Code */
+            error_code: string | null;
         };
         /** HTTPValidationError */
         HTTPValidationError: {
@@ -388,6 +476,80 @@ export interface components {
             goal: string;
             /** Members */
             members: components["schemas"]["PilotMember"][];
+        };
+        /** PreferenceBoard */
+        PreferenceBoard: {
+            /** Configured */
+            configured: boolean;
+            latest_run: components["schemas"]["ExtractionRunView"] | null;
+            /** Preferences */
+            preferences: components["schemas"]["PreferenceView"][];
+        };
+        /** PreferenceCorrection */
+        PreferenceCorrection: {
+            /**
+             * Expected Revision Id
+             * Format: uuid
+             */
+            expected_revision_id: string;
+            /** Statement */
+            statement: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "desire" | "concern" | "constraint" | "question" | "suggestion";
+            /** Strength */
+            strength?: ("nice_to_have" | "important" | "essential") | null;
+            /**
+             * Action
+             * @enum {string}
+             */
+            action: "confirm" | "correct" | "withdraw";
+        };
+        /** PreferenceSourceView */
+        PreferenceSourceView: {
+            /**
+             * Version Id
+             * Format: uuid
+             */
+            version_id: string;
+            /** Kind */
+            kind: string;
+            /** Text */
+            text: string;
+            /** Quote */
+            quote: string | null;
+            /** Historical */
+            historical: boolean;
+        };
+        /** PreferenceView */
+        PreferenceView: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Revision Id
+             * Format: uuid
+             */
+            revision_id: string;
+            /** Version */
+            version: number;
+            participant: components["schemas"]["UserView"];
+            /** Statement */
+            statement: string;
+            /** Kind */
+            kind: string;
+            /** Strength */
+            strength: string | null;
+            /** Status */
+            status: string;
+            /** Uncertainty Note */
+            uncertainty_note: string | null;
+            /** Sources */
+            sources: components["schemas"]["PreferenceSourceView"][];
         };
         /** SetupStatus */
         SetupStatus: {
@@ -802,6 +964,140 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AuthView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    board_api_workspaces__workspace_id__preferences_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                workspace_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PreferenceBoard"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    history_api_workspaces__workspace_id__preferences__preference_id__history_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                workspace_id: string;
+                preference_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PreferenceView"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    review_api_workspaces__workspace_id__preferences__preference_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                workspace_id: string;
+                preference_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PreferenceCorrection"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PreferenceView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    extract_api_workspaces__workspace_id__preference_extractions_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                workspace_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ExtractionRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExtractionRunView"];
                 };
             };
             /** @description Validation Error */

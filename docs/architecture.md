@@ -5,8 +5,15 @@ UI, session endpoints, member-scoped idea routes, schema artifacts, database
 records, and initial migration exist. Browser-based first-run setup collects the
 workspace and four accounts and opens an owner session. Whole-idea and passage annotation routes/UI
 are implemented with exact-source validation, persisted highlights, original
-context, and a keyboard selection alternative. AI execution, proposal reviews,
-decisions, and GitHub publication are pending.
+context, and a keyboard selection alternative. OpenAI preference extraction now
+runs against immutable snapshots; participants can confirm, correct, or withdraw
+their interpretations with retained history. The provider adapter currently lives
+in `backend/app/domain/extraction.py`, with job/review transitions in
+`backend/app/api/preferences.py` and synthetic evaluation in `backend/evaluation/`.
+Live credentials/model compatibility and semantic quality remain unverified.
+Group summaries, synthesis, proposal reviews, decisions, and GitHub publication
+are pending. Run a single API process: background jobs are local and interrupted
+jobs are marked failed on restart. A durable worker queue is future deployment work.
 Product intent is in [projBible.md](../projBible.md); the concrete
 record contracts are in [data-model.md](data-model.md).
 
@@ -91,8 +98,9 @@ startup, mark interrupted running jobs as failed and offer a fresh retry; do not
 claim durable job resumption. A separate worker can follow if needed.
 
 All human source, preference, constraint, goal, and policy writes increment a
-workspace input revision. Persisting AI outputs, reviews, and ticket records does
-not itself change that revision. A run reads
+workspace input revision. Persisting new inferred preference heads also increments
+it because those heads become inputs to later analysis. Other generated artifacts,
+proposal reviews, and ticket records do not themselves change that revision. A run reads
 and records its manifest in a short consistent transaction. Before draft publication
 or decision recording, compare the captured revision against current relevant
 inputs and revalidate. Conservatively flag any content/policy revision mismatch
@@ -101,8 +109,8 @@ their own history and are checked transactionally at decision time.
 
 Store model/provider identifiers, prompt versions, generation settings, input
 references, schema version, latency, usage, and stage outcomes. Do not put secrets
-in traces. The model provider and model are still open selections dependent on
-available team access; configure them behind one adapter, without building a
+in traces. The user selected OpenAI; an explicit server-side model selection and
+API key are still needed for live verification. Configure one adapter, without building a
 general multi-provider platform. Evaluation uses recorded settings and held-out
 cases; the primary question is still tracked in `todo.md` §7.
 
